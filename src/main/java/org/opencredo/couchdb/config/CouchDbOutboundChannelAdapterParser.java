@@ -27,6 +27,7 @@ import static org.springframework.integration.config.xml.IntegrationNamespaceUti
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.*;
 
 /**
+ * Parser for the "outbound-channel-adapter" element, part of the CouchDB namespace support.
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 17/01/2011
  */

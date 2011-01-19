@@ -19,6 +19,7 @@ package org.opencredo.couchdb.config;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
+ * Namespace handler for the CouchDB namespace.
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 17/01/2011
  */
