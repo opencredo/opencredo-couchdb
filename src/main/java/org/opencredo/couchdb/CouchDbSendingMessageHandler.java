@@ -1,3 +1,19 @@
+/*
+ * Copyright 2011 the original author or authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.opencredo.couchdb;
 
 import org.slf4j.Logger;
@@ -30,10 +46,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * A message handler that PUTs a CouchDB document for every message.
- * The id of the sent document is by defualt that of the Spring Integration message, but a custom id strategy can be provided.
- * CouchDbSendingMessageHandler relies on RestTemplate to communicate with CouchDB instances. By default a plain RestTemplate
- * is created but a custom can be injected using the appropriate constructor.
+ * A message handler that creates new CouchDB documents from SI messages.
+ * The id of the created documents is by default that of the Spring Integration message, but this can be customized using a Spel expression.
+ * This handler relies on a RestTemplate to communicate with CouchDB. By default a plain RestTemplate
+ * is created but a custom one can be provided using the appropriate constructor.
  *
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 11/01/2011
@@ -50,6 +66,9 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
     private Expression documentIdExpression;
 
 
+    /**
+     * Creates a handler instance with a database URL and a RestTemplate
+     */
     public CouchDbSendingMessageHandler(String databaseUrl, RestTemplate restTemplate) {
         Assert.hasText(databaseUrl, "databaseUrl cannot be empty");
         Assert.notNull(restTemplate, "restTemplate cannot be null");
@@ -57,13 +76,16 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
         this.restTemplate = restTemplate;
     }
 
+    /**
+     * Creates a handler instance with the database URL 
+     */
     public CouchDbSendingMessageHandler(String databaseUrl) {
         this(databaseUrl, new RestTemplate());
     }
 
 
     @Override
-    public void onInit() {
+    protected void onInit() {
         BeanFactory beanFactory = this.getBeanFactory();
         if (beanFactory != null) {
             this.evaluationContext.setBeanResolver(new BeanFactoryResolver(beanFactory));
@@ -110,6 +132,7 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
         return documentId;
     }
 
+    /** Sets the Spel expression used to create document ids. If not specified, the default behavior is to use the id of the handled message */
     public void setDocumentIdExpression(String documentIdExpression) {
         this.documentIdExpression = expressionParser.parseExpression(documentIdExpression);
     }
