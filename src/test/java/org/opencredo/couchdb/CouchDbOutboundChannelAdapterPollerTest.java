@@ -16,6 +16,11 @@
 
 package org.opencredo.couchdb;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
+
+import java.util.UUID;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +31,6 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.sql.Date;
-import java.util.UUID;
-
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
 
 
 /**

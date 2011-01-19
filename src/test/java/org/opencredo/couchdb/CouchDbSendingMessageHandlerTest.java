@@ -16,13 +16,11 @@
 
 package org.opencredo.couchdb;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
-
-import org.springframework.expression.spel.standard.SpelExpression;
 import org.springframework.integration.Message;
 import org.springframework.integration.support.MessageBuilder;
 

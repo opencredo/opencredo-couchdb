@@ -16,17 +16,16 @@
 
 package org.opencredo.couchdb;
 
+import static org.junit.Assume.assumeNoException;
+import static org.junit.Assume.assumeTrue;
+
 import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
-
-import static org.junit.Assume.assumeNoException;
-import static org.junit.Assume.assumeTrue;
 
 /**
  * Base class for CouchDB tests.

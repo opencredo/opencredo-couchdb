@@ -29,21 +29,10 @@ import org.springframework.expression.spel.support.StandardTypeConverter;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
 import org.springframework.integration.Message;
 import org.springframework.integration.handler.AbstractMessageHandler;
-import org.springframework.integration.json.JsonOutboundMessageMapper;
-import org.springframework.integration.mapping.OutboundMessageMapper;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestTemplate;
-import org.xml.sax.ErrorHandler;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * A message handler that creates new CouchDB documents from SI messages.

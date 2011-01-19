@@ -16,9 +16,9 @@
 
 package org.opencredo.couchdb;
 
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-
 import java.util.Date;
+
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
  * @since 13/01/2011

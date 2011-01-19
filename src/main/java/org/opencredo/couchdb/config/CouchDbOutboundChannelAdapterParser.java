@@ -16,6 +16,11 @@
 
 package org.opencredo.couchdb.config;
 
+import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DATABASE_URL_ATTRIBUTE;
+import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_ID_EXPRESSION_ATTRIBUTE;
+import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_ID_EXPRESSION_PROPERTY;
+import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_REST_TEMPLATE_ATTRIBUTE;
+
 import org.opencredo.couchdb.CouchDbSendingMessageHandler;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -23,8 +28,6 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.integration.config.xml.AbstractOutboundChannelAdapterParser;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
-import static org.springframework.integration.config.xml.IntegrationNamespaceUtils.*;
-import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.*;
 
 /**
  * Parser for the "outbound-channel-adapter" element, part of the CouchDB namespace support.
