@@ -53,7 +53,7 @@ public class CouchDbOutboundChannelAdapterPollerTest extends CouchDbTest {
         messagingTemplate.send(message);
 
         DummyDocument response = null;
-        for(int i = 0; i < 3; i++) {
+        for(int i = 0; i < 1; i++) {
             try {
                 response = (DummyDocument) messagingTemplate.convertSendAndReceive("testRequestChannel", message.getHeaders().getId());
                 break;

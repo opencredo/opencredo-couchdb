@@ -28,7 +28,8 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Base class for CouchDB tests.
+ * Base class for CouchDB tests. For the moment we check whether CouchDB is available before each test,
+ * in which case the test is executed. If CouchDB or the target database is not available, the test is ignored.
  *
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 13/01/2011
@@ -37,10 +38,6 @@ public abstract class CouchDbTest {
 
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
-
-    protected final static String FEED_NONE = "";
-    protected final static String FEED_LONG_POLL = "longpoll";
-
 
     protected static final String DEFAULT_DATABASE_URL = "http://127.0.0.1:5984/messages/";
     protected String databaseUrl = DEFAULT_DATABASE_URL;
@@ -61,6 +58,9 @@ public abstract class CouchDbTest {
         }
     }
 
+    /**
+     * Reads a CouchDB document and converts it to the expected type.
+     */
     protected <T> T getDocument(String id, Class<T> expectedType) {
         String url = databaseUrl + "{id}";
         return testTemplate.getForObject(url, expectedType, id);
