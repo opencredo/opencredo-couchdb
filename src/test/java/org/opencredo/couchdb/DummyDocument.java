@@ -21,19 +21,20 @@ import java.util.Date;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 /**
+ * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 13/01/2011
  */
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class TestDocument {
+public class DummyDocument {
 
     private String message;
 
     private String timestamp = new Date().toString();
 
-    public TestDocument() {
+    public DummyDocument() {
     }
 
-    public TestDocument(String message) {
+    public DummyDocument(String message) {
         this.message = message;
     }
 
@@ -54,7 +55,7 @@ public class TestDocument {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TestDocument document = (TestDocument) o;
+        DummyDocument document = (DummyDocument) o;
 
         if (message != null ? !message.equals(document.message) : document.message != null) return false;
         if (timestamp != null ? !timestamp.equals(document.timestamp) : document.timestamp != null) return false;
@@ -71,7 +72,7 @@ public class TestDocument {
 
     @Override
     public String toString() {
-        return "TestDocument{" +
+        return "DummyDocument{" +
                 "message='" + message + '\'' +
                 ", timestamp=" + timestamp +
                 '}';

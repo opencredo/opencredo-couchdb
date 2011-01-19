@@ -48,14 +48,14 @@ public class CouchDbOutboundChannelAdapterPollerTest extends CouchDbTest {
     @Test
     @Repeat(5)
     public void sendMessage() throws Exception {
-        TestDocument document = new TestDocument("polling test - " + UUID.randomUUID());
-        Message<TestDocument> message = MessageBuilder.withPayload(document).build();
+        DummyDocument document = new DummyDocument("polling test - " + UUID.randomUUID());
+        Message<DummyDocument> message = MessageBuilder.withPayload(document).build();
         messagingTemplate.send(message);
 
-        TestDocument response = null;
+        DummyDocument response = null;
         for(int i = 0; i < 3; i++) {
             try {
-                response = (TestDocument) messagingTemplate.convertSendAndReceive("testRequestChannel", message.getHeaders().getId());
+                response = (DummyDocument) messagingTemplate.convertSendAndReceive("testRequestChannel", message.getHeaders().getId());
                 break;
             } catch (MessageHandlingException e) {
                 Thread.sleep(1000);

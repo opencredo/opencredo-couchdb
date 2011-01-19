@@ -29,6 +29,8 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * Base class for CouchDB tests.
+ *
+ * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 13/01/2011
  */
 public abstract class CouchDbTest {

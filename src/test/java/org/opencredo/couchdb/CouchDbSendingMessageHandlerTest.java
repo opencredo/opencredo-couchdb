@@ -25,6 +25,7 @@ import org.springframework.integration.Message;
 import org.springframework.integration.support.MessageBuilder;
 
 /**
+ * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 11/01/2011
  */
 public class CouchDbSendingMessageHandlerTest extends CouchDbTest {
@@ -38,13 +39,13 @@ public class CouchDbSendingMessageHandlerTest extends CouchDbTest {
 
     @Test
     public void handleMessage() throws Exception {
-        TestDocument document = new TestDocument("Klaatu Berada Nikto");
-        Message<TestDocument> message = MessageBuilder.withPayload(document).build();
+        DummyDocument document = new DummyDocument("Klaatu Berada Nikto");
+        Message<DummyDocument> message = MessageBuilder.withPayload(document).build();
         logger.debug("message id = {}", message.getHeaders().getId());
         messageHandler.handleMessage(message);
 
         //assert message in the database
-        TestDocument result = getDocument(message.getHeaders().getId().toString(), TestDocument.class);
+        DummyDocument result = getDocument(message.getHeaders().getId().toString(), DummyDocument.class);
         logger.debug("result: [{}]", result);
         assertThat(document.getMessage(), equalTo(result.getMessage()));
 

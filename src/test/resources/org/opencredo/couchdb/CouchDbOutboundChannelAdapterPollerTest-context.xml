@@ -29,7 +29,7 @@
 
     <si-http:outbound-gateway url="http://127.0.0.1:5984/messages/{id}" http-method="GET"
                               request-channel="testRequestChannel"
-                              expected-response-type="org.opencredo.couchdb.TestDocument">
+                              expected-response-type="org.opencredo.couchdb.DummyDocument">
         <si-http:uri-variable name="id" expression="payload.toString()"/>
     </si-http:outbound-gateway>
 

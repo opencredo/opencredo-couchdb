@@ -39,8 +39,8 @@ public class CouchDbOutboundChannelAdapterTest extends CouchDbTest {
 
     @Test
     public void sendMessage() {
-        TestDocument document = new TestDocument("klaatu berada nikto");
-        Message<TestDocument> message = MessageBuilder.withPayload(document).build();
+        DummyDocument document = new DummyDocument("klaatu berada nikto");
+        Message<DummyDocument> message = MessageBuilder.withPayload(document).build();
         logger.debug("message id = {}", message.getHeaders().getId());
         messagingTemplate.send(message);
     }
