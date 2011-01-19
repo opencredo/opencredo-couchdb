@@ -46,7 +46,6 @@ public class CouchDbOutboundChannelAdapterPollerTest extends CouchDbTest {
     private MessagingTemplate messagingTemplate;
 
     @Test
-    @Repeat(5)
     public void sendMessage() throws Exception {
         DummyDocument document = new DummyDocument("polling test - " + UUID.randomUUID());
         Message<DummyDocument> message = MessageBuilder.withPayload(document).build();
