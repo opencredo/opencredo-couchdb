@@ -1,0 +1,2 @@
+http\://www.opencredo.com/schema/couchdb/integration/opencredo-integration-couchdb-1.0.xsd=org/opencredo/couchdb/config/opencredo-integration-couchdb-1.0.xsd
+http\://www.opencredo.com/schema/couchdb/integration/opencredo-integration-couchdb.xsd=org/opencredo/couchdb/config/opencredo-integration-couchdb-1.0.xsd

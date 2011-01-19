@@ -1,0 +1,1 @@
+http\://www.opencredo.com/schema/couchdb/integration=org.opencredo.couchdb.config.CouchDbNamespaceHandler

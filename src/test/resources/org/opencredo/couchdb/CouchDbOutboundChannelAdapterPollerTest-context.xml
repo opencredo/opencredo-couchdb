@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:si="http://www.springframework.org/schema/integration"
+       xmlns:si-http="http://www.springframework.org/schema/integration/http"
+       xmlns:si-couchdb="http://www.opencredo.com/schema/couchdb/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.opencredo.com/schema/couchdb/integration http://www.opencredo.com/schema/couchdb/integration/opencredo-integration-couchdb-1.0.xsd
+						http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.0.xsd
+						http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http-2.0.xsd">
+
+
+    <si:channel id="input">
+        <si:queue capacity="1"/>
+    </si:channel>
+
+    <si-couchdb:outbound-channel-adapter id="couchdb" channel="input"
+                                         database-url="http://127.0.0.1:5984/messages">
+        <si:poller>
+            <si:interval-trigger interval="1000"/>
+        </si:poller>
+    </si-couchdb:outbound-channel-adapter>
+
+    <bean class="org.springframework.integration.core.MessagingTemplate">
+        <constructor-arg ref="input"/>
+    </bean>
+
+    <si:channel id="testRequestChannel"/>
+
+    <si-http:outbound-gateway url="http://127.0.0.1:5984/messages/{id}" http-method="GET"
+                              request-channel="testRequestChannel"
+                              expected-response-type="org.opencredo.couchdb.TestDocument">
+        <si-http:uri-variable name="id" expression="payload.toString()"/>
+    </si-http:outbound-gateway>
+
+
+</beans>
