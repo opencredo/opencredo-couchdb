@@ -16,21 +16,21 @@
 
 package org.opencredo.couchdb;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
-
-import java.util.UUID;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.Message;
-import org.springframework.integration.MessageHandlingException;
 import org.springframework.integration.core.MessagingTemplate;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Repeat;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.UUID;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 
 /**
@@ -46,21 +46,14 @@ public class CouchDbOutboundChannelAdapterPollerTest extends CouchDbTest {
     private MessagingTemplate messagingTemplate;
 
     @Test
+    @Repeat(10)
+    @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
     public void sendMessage() throws Exception {
         DummyDocument document = new DummyDocument("polling test - " + UUID.randomUUID());
         Message<DummyDocument> message = MessageBuilder.withPayload(document).build();
         messagingTemplate.send(message);
 
-        DummyDocument response = null;
-        for(int i = 0; i < 1; i++) {
-            try {
-                response = (DummyDocument) messagingTemplate.convertSendAndReceive("testRequestChannel", message.getHeaders().getId());
-                break;
-            } catch (MessageHandlingException e) {
-                Thread.sleep(1000);
-            }
-        }
+        DummyDocument response = (DummyDocument) messagingTemplate.convertSendAndReceive("testRequestChannel", message.getHeaders().getId());
         assertThat(document.getMessage(), equalTo(response.getMessage()));
-
     }
 }
