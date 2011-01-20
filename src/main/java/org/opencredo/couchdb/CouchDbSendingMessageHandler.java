@@ -92,7 +92,7 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
         String documentId = createDocumentId(message);
         HttpEntity<?> httpEntity = createHttpEntity(message);
 
-        logger.debug("sending message to CouchDB [{}]" + httpEntity);
+        logger.debug("sending message to CouchDB [{}]", httpEntity.getBody());
         restOperations.put(databaseUrl, httpEntity, documentId);
     }
 
