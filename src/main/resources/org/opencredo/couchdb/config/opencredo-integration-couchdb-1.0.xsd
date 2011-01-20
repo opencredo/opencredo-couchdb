@@ -60,7 +60,7 @@
                     ]]></xsd:documentation>
                 </xsd:annotation>
             </xsd:attribute>
-            <xsd:attribute name="rest-template" type="xsd:string">
+            <xsd:attribute name="rest-operations" type="xsd:string">
                 <xsd:annotation>
                     <xsd:documentation><![CDATA[
         Specifies a custom RestTemplate to use to communicate with CouchDB.

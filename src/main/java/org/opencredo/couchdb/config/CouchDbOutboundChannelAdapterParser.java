@@ -19,7 +19,7 @@ package org.opencredo.couchdb.config;
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DATABASE_URL_ATTRIBUTE;
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_ID_EXPRESSION_ATTRIBUTE;
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_ID_EXPRESSION_PROPERTY;
-import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_REST_TEMPLATE_ATTRIBUTE;
+import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_REST_OPERATIONS_ATTRIBUTE;
 
 import org.opencredo.couchdb.CouchDbSendingMessageHandler;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
@@ -40,7 +40,7 @@ public class CouchDbOutboundChannelAdapterParser extends AbstractOutboundChannel
     protected AbstractBeanDefinition parseConsumer(Element element, ParserContext parserContext) {
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(CouchDbSendingMessageHandler.class);
         String databaseUrl = element.getAttribute(COUCHDB_DATABASE_URL_ATTRIBUTE);
-        String restTempte = element.getAttribute(COUCHDB_REST_TEMPLATE_ATTRIBUTE);
+        String restTempte = element.getAttribute(COUCHDB_REST_OPERATIONS_ATTRIBUTE);
         String documentIdExpression = element.getAttribute(COUCHDB_DOCUMENT_ID_EXPRESSION_ATTRIBUTE);
 
         if (!StringUtils.hasText(databaseUrl)) {

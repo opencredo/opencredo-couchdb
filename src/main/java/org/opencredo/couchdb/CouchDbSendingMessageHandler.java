@@ -32,6 +32,7 @@ import org.springframework.http.MediaType;
 import org.springframework.integration.Message;
 import org.springframework.integration.handler.AbstractMessageHandler;
 import org.springframework.util.Assert;
+import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -49,7 +50,7 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
 
     private static final ExpressionParser expressionParser = new SpelExpressionParser();
 
-    private final RestTemplate restTemplate;
+    private final RestOperations restOperations;
     private final String databaseUrl;
     private final StandardEvaluationContext evaluationContext = new StandardEvaluationContext();
     private Expression documentIdExpression;
@@ -58,11 +59,11 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
     /**
      * Creates a handler instance with a database URL and a RestTemplate
      */
-    public CouchDbSendingMessageHandler(String databaseUrl, RestTemplate restTemplate) {
+    public CouchDbSendingMessageHandler(String databaseUrl, RestOperations restOperations) {
         Assert.hasText(databaseUrl, "databaseUrl cannot be empty");
-        Assert.notNull(restTemplate, "restTemplate cannot be null");
+        Assert.notNull(restOperations, "restTemplate cannot be null");
         this.databaseUrl = CouchDbUtils.addId(databaseUrl);
-        this.restTemplate = restTemplate;
+        this.restOperations = restOperations;
     }
 
     /**
@@ -90,7 +91,9 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
     protected final void handleMessageInternal(Message<?> message) throws Exception {
         String documentId = createDocumentId(message);
         HttpEntity<?> httpEntity = createHttpEntity(message);
-        restTemplate.put(databaseUrl, httpEntity, documentId);
+
+        logger.debug("sending message to CouchDB [{}]" + httpEntity);
+        restOperations.put(databaseUrl, httpEntity, documentId);
     }
 
     private HttpEntity<?> createHttpEntity(Message<?> message) {
