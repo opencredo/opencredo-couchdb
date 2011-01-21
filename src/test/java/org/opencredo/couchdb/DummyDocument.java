@@ -58,16 +58,13 @@ public class DummyDocument {
         DummyDocument document = (DummyDocument) o;
 
         if (message != null ? !message.equals(document.message) : document.message != null) return false;
-        if (timestamp != null ? !timestamp.equals(document.timestamp) : document.timestamp != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        int result = message != null ? message.hashCode() : 0;
-        result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
-        return result;
+        return message != null ? message.hashCode() : 0;
     }
 
     @Override
