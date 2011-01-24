@@ -19,7 +19,7 @@ package org.opencredo.couchdb;
 /**
  * Utility class with operations to manipulate CouchDB URLS
  *
- * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
+ * @author Tareq Abedrabbo
  * @since 13/01/2011
  */
 public class CouchDbUtils {
@@ -28,7 +28,7 @@ public class CouchDbUtils {
     }
 
     /**
-     * Adds and id variable to a URL
+     * Adds an id variable to a URL
      * @param url the URL to modify
      * @return the modified URL
      */
@@ -36,12 +36,22 @@ public class CouchDbUtils {
         return ensureTrailingSlash(url) + "{id}";
     }
 
+
+    /**
+     * Adds a 'changes since' variable to a URL
+     * @param url
+     * @return
+     */
+    public static String addChangesSince(String url) {
+        return ensureTrailingSlash(url) + "_changes?since={seq}";
+    }
+
     /**
      * Ensures that a URL ends with a slash.
      * @param url the URL to modify
      * @return the modified URL
      */
-    private static String ensureTrailingSlash(String url) {
+    public static String ensureTrailingSlash(String url) {
         if (!url.endsWith("/")) {
             url += "/";
         }
