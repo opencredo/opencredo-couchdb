@@ -44,7 +44,7 @@ public class CouchDbOutboundChannelAdapterParser extends AbstractOutboundChannel
         String documentIdExpression = element.getAttribute(COUCHDB_DOCUMENT_ID_EXPRESSION_ATTRIBUTE);
 
         if (!StringUtils.hasText(databaseUrl)) {
-            parserContext.getReaderContext().error("The 'database-url' is mandatory.", parserContext.extractSource(element));
+            parserContext.getReaderContext().error("The '" + COUCHDB_DATABASE_URL_ATTRIBUTE + "' is mandatory.", parserContext.extractSource(element));
         }
 
         builder.addConstructorArgValue(databaseUrl);

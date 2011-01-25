@@ -29,13 +29,13 @@ import java.util.UUID;
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 21/01/2011
  */
-public class CouchDbMessageTransformer extends AbstractTransformer{
+public class CouchDbIdToDocumentTransformer extends AbstractTransformer{
 
     private final RestOperations restOperations;
     private final String databaseUrl;
     private final Class<?> documentType;
 
-    public CouchDbMessageTransformer(String databaseUrl, Class<?> documentType, RestOperations restOperations) {
+    public CouchDbIdToDocumentTransformer(String databaseUrl, Class<?> documentType, RestOperations restOperations) {
         Assert.hasText(databaseUrl, "databaseUrl cannot be empty");
         Assert.notNull(documentType, "documentType cannot be null");
         Assert.notNull(restOperations, "restTemplate cannot be null");
@@ -44,7 +44,7 @@ public class CouchDbMessageTransformer extends AbstractTransformer{
         this.restOperations = restOperations;
     }
 
-    public CouchDbMessageTransformer(String databaseUrl, Class<?> documentType) {
+    public CouchDbIdToDocumentTransformer(String databaseUrl, Class<?> documentType) {
         this(databaseUrl, documentType, new RestTemplate());
     }
 

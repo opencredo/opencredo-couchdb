@@ -36,16 +36,16 @@ import static org.junit.Assert.*;
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 21/01/2011
  */
-public class CouchDbMessageTransformerTest {
+public class CouchDbIdToDocumentTransformerTest {
 
-    private CouchDbMessageTransformer transformer;
+    private CouchDbIdToDocumentTransformer transformer;
     private RestOperations restOperations;
     
 
     @Before
     public void setUp() throws Exception {
         restOperations = mock(RestOperations.class);
-        transformer = new CouchDbMessageTransformer("xxx", DummyDocument.class, restOperations);
+        transformer = new CouchDbIdToDocumentTransformer("xxx", DummyDocument.class, restOperations);
     }
 
     @Test
