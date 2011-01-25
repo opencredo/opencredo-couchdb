@@ -32,7 +32,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
-public class CouchDbOutboundChannelAdapterTest extends CouchDbTest {
+public class CouchDbOutboundChannelAdapterTest extends CouchDbIntegrationTest {
 
     @Autowired
     private MessagingTemplate messagingTemplate;

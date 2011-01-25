@@ -28,13 +28,13 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Base class for CouchDB tests. For the moment we check whether CouchDB is available before each test,
+ * Base class for CouchDB integration tests. For the moment we check whether CouchDB is available before each test,
  * in which case the test is executed. If CouchDB or the target database is not available, the test is ignored.
  *
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 13/01/2011
  */
-public abstract class CouchDbTest {
+public abstract class CouchDbIntegrationTest {
 
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());

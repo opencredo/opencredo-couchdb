@@ -28,7 +28,7 @@ import org.springframework.integration.support.MessageBuilder;
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 11/01/2011
  */
-public class CouchDbSendingMessageHandlerTest extends CouchDbTest {
+public class CouchDbSendingMessageHandlerTest extends CouchDbIntegrationTest {
 
     private CouchDbSendingMessageHandler messageHandler;
 
