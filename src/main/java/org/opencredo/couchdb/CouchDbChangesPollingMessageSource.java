@@ -33,7 +33,7 @@ import java.util.concurrent.PriorityBlockingQueue;
  * @author Tomas Lukosius
  * @since 24/01/2011
  */
-public class CouchDbChangePollingMessageSource extends IntegrationObjectSupport implements MessageSource<URI> {
+public class CouchDbChangesPollingMessageSource extends IntegrationObjectSupport implements MessageSource<URI> {
 
 
     private static final int DEFAULT_INTERNAL_QUEUE_CAPACITY = 5;
@@ -43,7 +43,7 @@ public class CouchDbChangePollingMessageSource extends IntegrationObjectSupport 
 
     private final ChangesPoller changesPoller;
 
-    public CouchDbChangePollingMessageSource(ChangesPoller changesPoller) {
+    public CouchDbChangesPollingMessageSource(ChangesPoller changesPoller) {
         this.changesPoller = changesPoller;
         this.toBeReceived = new PriorityBlockingQueue<ChangedDocument>(
                 DEFAULT_INTERNAL_QUEUE_CAPACITY, new Comparator<ChangedDocument>() {
@@ -58,7 +58,7 @@ public class CouchDbChangePollingMessageSource extends IntegrationObjectSupport 
                 });
     }
 
-    public CouchDbChangePollingMessageSource(String databaseUrl) {
+    public CouchDbChangesPollingMessageSource(String databaseUrl) {
         this(new DefaultChangesPoller(databaseUrl, new RestTemplate()));
     }
 

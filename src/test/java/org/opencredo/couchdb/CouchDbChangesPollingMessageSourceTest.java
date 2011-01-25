@@ -39,18 +39,18 @@ import static org.mockito.Mockito.when;
  * @author Tareq Abedrabbo
  * @since 24/01/2011
  */
-public class CouchDbChangePollingMessageSourceTest {
+public class CouchDbChangesPollingMessageSourceTest {
 
 
     private static final int NUMBER_OF_CHANGES = 10;
     private ChangesPoller changesPoller;
 
-    private CouchDbChangePollingMessageSource messageSource;
+    private CouchDbChangesPollingMessageSource messageSource;
 
     @Before
     public void setUp() throws Exception {
         changesPoller = mock(ChangesPoller.class);
-        messageSource = new CouchDbChangePollingMessageSource(changesPoller);
+        messageSource = new CouchDbChangesPollingMessageSource(changesPoller);
     }
 
     @Test
