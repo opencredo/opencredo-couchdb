@@ -16,6 +16,7 @@
 
 package org.opencredo.couchdb.config;
 
+import org.opencredo.couchdb.CouchDbIdToDocumentTransformer;
 import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 
 /**
@@ -27,5 +28,6 @@ public class CouchDbNamespaceHandler extends NamespaceHandlerSupport {
 
     public void init() {
         registerBeanDefinitionParser("outbound-channel-adapter", new CouchDbOutboundChannelAdapterParser());
+        registerBeanDefinitionParser("id-to-document-transformer", new CouchDbIdToDocumentTransformerParser());
     }
 }

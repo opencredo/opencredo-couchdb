@@ -26,6 +26,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.UUID;
 
 /**
+ * A message transformer that reads a CouchDB document from the database.
+ * </p>
+ * The payload of the message is expected to contain the id of the message to read.
+ * The class type to transform to is specified through the the documentType property.
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 21/01/2011
  */

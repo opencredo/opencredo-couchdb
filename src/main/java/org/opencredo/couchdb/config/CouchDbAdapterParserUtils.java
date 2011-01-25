@@ -28,6 +28,7 @@ public class CouchDbAdapterParserUtils {
     static final String COUCHDB_DATABASE_URL_ATTRIBUTE = "database-url";
     static final String COUCHDB_REST_OPERATIONS_ATTRIBUTE = "rest-operations";
     static final String COUCHDB_DOCUMENT_ID_EXPRESSION_ATTRIBUTE = "document-id-expression";
+    static final String COUCHDB_DOCUMENT_TYPE = "document-type";
 
     static final String COUCHDB_DOCUMENT_ID_EXPRESSION_PROPERTY = "documentIdExpression";
 
