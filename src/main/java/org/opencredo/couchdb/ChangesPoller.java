@@ -19,10 +19,17 @@ package org.opencredo.couchdb;
 import java.util.Collection;
 
 /**
+ * This component is responsible for polling a CouchDB instance for changes, typically using
+ * the changes API.
+ *
  * @author Tareq Abedrabbo
  * @since 24/01/2011
  */
 public interface ChangesPoller {
 
+    /**
+     * Polls a database for changes.
+     * @return the collection of changes or an empty collection if no changes are found
+     */
     Collection<ChangedDocument> pollForChanges();
 }

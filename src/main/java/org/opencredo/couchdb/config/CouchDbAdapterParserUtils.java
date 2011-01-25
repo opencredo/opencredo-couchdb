@@ -31,5 +31,4 @@ public class CouchDbAdapterParserUtils {
 
     static final String COUCHDB_DOCUMENT_ID_EXPRESSION_PROPERTY = "documentIdExpression";
 
-
 }
