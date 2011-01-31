@@ -23,9 +23,10 @@ import org.springframework.integration.config.xml.AbstractTransformerParser;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
+import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_CHANGES_OPERATIONS_ATTRIBUTE;
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DATABASE_URL_ATTRIBUTE;
-import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_TYPE;
-import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_REST_OPERATIONS_ATTRIBUTE;
+import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_OPERATIONS_ATTRIBUTE;
+import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_TYPE_ATTRIBUTE;
 
 /**
  * @author Tareq Abedrabbo
@@ -40,22 +41,30 @@ public class CouchDbIdToDocumentTransformerParser extends AbstractTransformerPar
     @Override
     protected void parseTransformer(Element element, ParserContext parserContext, BeanDefinitionBuilder builder) {
         String databaseUrl = element.getAttribute(COUCHDB_DATABASE_URL_ATTRIBUTE);
-        String documentType = element.getAttribute(COUCHDB_DOCUMENT_TYPE);
-        String restOperations = element.getAttribute(COUCHDB_REST_OPERATIONS_ATTRIBUTE);
-
-        if (!StringUtils.hasText(databaseUrl)) {
-            parserContext.getReaderContext().error("The '" + COUCHDB_DATABASE_URL_ATTRIBUTE + "' is mandatory.", parserContext.extractSource(element));
-        }
+        String documentType = element.getAttribute(COUCHDB_DOCUMENT_TYPE_ATTRIBUTE);
+        String documentOperations = element.getAttribute(COUCHDB_DOCUMENT_OPERATIONS_ATTRIBUTE);
 
         if (!StringUtils.hasText(documentType)) {
-            parserContext.getReaderContext().error("The '" + COUCHDB_DOCUMENT_TYPE + "' is mandatory.", parserContext.extractSource(element));
+            parserContext.getReaderContext().error("The '" + COUCHDB_DOCUMENT_TYPE_ATTRIBUTE +
+                    "' is mandatory.", parserContext.extractSource(element));
+        } else {
+            builder.addConstructorArgValue(documentType);
         }
 
-        builder.addConstructorArgValue(databaseUrl).addConstructorArgValue(documentType);
-
-        if (StringUtils.hasText(restOperations)) {
-            builder.addConstructorArgReference(restOperations);
+        if (StringUtils.hasText(databaseUrl)) {
+            if (StringUtils.hasText(documentOperations)) {
+                parserContext.getReaderContext().error(
+                        "At most one of '" + COUCHDB_DATABASE_URL_ATTRIBUTE + "' and '" +
+                                COUCHDB_DOCUMENT_OPERATIONS_ATTRIBUTE + "' may be provided.", element);
+            } else {
+                builder.addConstructorArgValue(databaseUrl);
+            }
+        } else if (StringUtils.hasText(documentOperations)) {
+            builder.addConstructorArgReference(documentOperations);
+        } else {
+            parserContext.getReaderContext().error(
+                    "Either '" + COUCHDB_DATABASE_URL_ATTRIBUTE + "' or '" +
+                            COUCHDB_DOCUMENT_OPERATIONS_ATTRIBUTE + "' must be provided.", element);
         }
-
     }
 }

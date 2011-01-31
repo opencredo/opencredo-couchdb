@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.opencredo.couchdb.inbound;
+package org.opencredo.couchdb.core;
 
 import java.net.URI;
 
@@ -39,7 +39,7 @@ public class ChangedDocument {
     private final Long sequence;
 
     /**
-     * The only constructor to create a ChangedDocument.
+     * The unique constructor to create a ChangedDocument.
      * @param uri the URI of the changes document.
      *        Example: http://127.0.0.1:5984/mydatabase/f958e9b0-bde6-429e-b4b3-a360a1bfe0a1
      * @param status the nature of the change event: created, deleted or updated

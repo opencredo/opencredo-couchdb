@@ -60,10 +60,10 @@
                     ]]></xsd:documentation>
                 </xsd:annotation>
             </xsd:attribute>
-            <xsd:attribute name="rest-operations" type="xsd:string">
+            <xsd:attribute name="document-operations" type="xsd:string">
                 <xsd:annotation>
                     <xsd:documentation><![CDATA[
-        Specifies a custom RestTemplate to use to communicate with CouchDB.
+        Specifies a custom DocumentCreator to use to communicate with CouchDB.
                     ]]></xsd:documentation>
                 </xsd:annotation>
             </xsd:attribute>
@@ -110,7 +110,7 @@
                     ]]></xsd:documentation>
                 </xsd:annotation>
             </xsd:attribute>
-            <xsd:attribute name="rest-operations" type="xsd:string">
+            <xsd:attribute name="document-operations" type="xsd:string">
                 <xsd:annotation>
                     <xsd:documentation><![CDATA[
         Specifies a custom RestOperations to use to communicate with CouchDB.
@@ -143,7 +143,7 @@
                 <xsd:element ref="integration:poller" minOccurs="0" maxOccurs="1"/>
             </xsd:sequence>
             <xsd:attribute name="database-url" type="xsd:string"/>
-            <xsd:attribute name="changes-poller" type="xsd:string"/>
+            <xsd:attribute name="changes-operations" type="xsd:string"/>
             <xsd:attribute name="id" type="xsd:string"/>
             <xsd:attribute name="channel" type="xsd:string">
                 <xsd:annotation>

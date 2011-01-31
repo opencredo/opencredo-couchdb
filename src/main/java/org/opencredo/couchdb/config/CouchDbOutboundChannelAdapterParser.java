@@ -27,10 +27,11 @@ import org.w3c.dom.Element;
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DATABASE_URL_ATTRIBUTE;
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_ID_EXPRESSION_ATTRIBUTE;
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_ID_EXPRESSION_PROPERTY;
-import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_REST_OPERATIONS_ATTRIBUTE;
+import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_OPERATIONS_ATTRIBUTE;
 
 /**
  * Parser for the "outbound-channel-adapter" element, part of the CouchDB namespace support.
+ *
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 17/01/2011
  */
@@ -40,17 +41,23 @@ public class CouchDbOutboundChannelAdapterParser extends AbstractOutboundChannel
     protected AbstractBeanDefinition parseConsumer(Element element, ParserContext parserContext) {
         BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(CouchDbSendingMessageHandler.class);
         String databaseUrl = element.getAttribute(COUCHDB_DATABASE_URL_ATTRIBUTE);
-        String restTempte = element.getAttribute(COUCHDB_REST_OPERATIONS_ATTRIBUTE);
+        String documentOperations = element.getAttribute(COUCHDB_DOCUMENT_OPERATIONS_ATTRIBUTE);
         String documentIdExpression = element.getAttribute(COUCHDB_DOCUMENT_ID_EXPRESSION_ATTRIBUTE);
 
-        if (!StringUtils.hasText(databaseUrl)) {
-            parserContext.getReaderContext().error("The '" + COUCHDB_DATABASE_URL_ATTRIBUTE + "' is mandatory.", parserContext.extractSource(element));
-        }
-
-        builder.addConstructorArgValue(databaseUrl);
-
-        if (StringUtils.hasText(restTempte)) {
-            builder.addConstructorArgReference(restTempte);
+        if (StringUtils.hasText(databaseUrl)) {
+            if (StringUtils.hasText(documentOperations)) {
+                parserContext.getReaderContext().error(
+                        "At most one of '" + COUCHDB_DATABASE_URL_ATTRIBUTE + "' and '" +
+                                COUCHDB_DOCUMENT_OPERATIONS_ATTRIBUTE + "' may be provided.", element);
+            } else {
+                builder.addConstructorArgValue(databaseUrl);
+            }
+        } else if (StringUtils.hasText(documentOperations)) {
+            builder.addConstructorArgReference(documentOperations);
+        } else {
+            parserContext.getReaderContext().error(
+                    "Either '" + COUCHDB_DATABASE_URL_ATTRIBUTE + "' or '" +
+                            COUCHDB_DOCUMENT_OPERATIONS_ATTRIBUTE + "' must be provided.", element);
         }
 
         if (StringUtils.hasText(documentIdExpression)) {

@@ -16,7 +16,8 @@
 
 package org.opencredo.couchdb.outbound;
 
-import org.opencredo.couchdb.CouchDbUtils;
+import org.opencredo.couchdb.core.CouchDbDocumentOperations;
+import org.opencredo.couchdb.core.CouchDbDocumentTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -27,14 +28,9 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.expression.spel.support.StandardTypeConverter;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.integration.Message;
 import org.springframework.integration.handler.AbstractMessageHandler;
 import org.springframework.util.Assert;
-import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * A message handler that creates new CouchDB documents from SI messages.
@@ -51,27 +47,21 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
 
     private static final ExpressionParser expressionParser = new SpelExpressionParser();
 
-    private final RestOperations restOperations;
-    private final String databaseUrl;
+    private final CouchDbDocumentOperations couchDbDocumentOperations;
     private final StandardEvaluationContext evaluationContext = new StandardEvaluationContext();
     private Expression documentIdExpression;
 
 
-    /**
-     * Creates a handler instance with a database URL and a RestTemplate
-     */
-    public CouchDbSendingMessageHandler(String databaseUrl, RestOperations restOperations) {
-        Assert.hasText(databaseUrl, "databaseUrl cannot be empty");
-        Assert.notNull(restOperations, "restTemplate cannot be null");
-        this.databaseUrl = CouchDbUtils.addId(databaseUrl);
-        this.restOperations = restOperations;
+    public CouchDbSendingMessageHandler(CouchDbDocumentOperations couchDbDocumentOperations) {
+        Assert.notNull(couchDbDocumentOperations, "couchDbDocumentOperations cannot be null");
+        this.couchDbDocumentOperations = couchDbDocumentOperations;
     }
 
     /**
      * Creates a handler instance with the database URL 
      */
     public CouchDbSendingMessageHandler(String databaseUrl) {
-        this(databaseUrl, new RestTemplate());
+        this(new CouchDbDocumentTemplate(databaseUrl));
     }
 
 
@@ -91,27 +81,8 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
     @Override
     protected final void handleMessageInternal(Message<?> message) throws Exception {
         String documentId = createDocumentId(message);
-        HttpEntity<?> httpEntity = createHttpEntity(message);
-
-        logger.debug("sending message to CouchDB [{}]", httpEntity.getBody());
-        restOperations.put(databaseUrl, httpEntity, documentId);
-    }
-
-    private HttpEntity<?> createHttpEntity(Message<?> message) {
-        Object payload = message.getPayload();
-
-        if (payload instanceof HttpEntity) {
-            HttpEntity httpEntity = (HttpEntity) payload;
-            Assert.isTrue(httpEntity.getHeaders().getContentType().equals(MediaType.APPLICATION_JSON),
-                    "HttpEntity payload with non application/json content type found.");
-            return httpEntity;
-        }
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Object> httpEntity = new HttpEntity<Object>(payload, httpHeaders);
-
-        return httpEntity;
+        logger.debug("sending message to CouchDB [{}]", message);
+        couchDbDocumentOperations.writeDocument(documentId, message.getPayload());
     }
 
     private String createDocumentId(Message<?> message) {
@@ -125,7 +96,9 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
         return documentId;
     }
 
-    /** Sets the Spel expression used to create document ids. If not specified, the default behavior is to use the id of the handled message */
+    /** Sets the Spel expression used to create document ids. If not specified,
+     * the default behavior is to use the id of the handled message
+     */
     public void setDocumentIdExpression(String documentIdExpression) {
         this.documentIdExpression = expressionParser.parseExpression(documentIdExpression);
     }

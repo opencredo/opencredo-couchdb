@@ -16,6 +16,9 @@
 
 package org.opencredo.couchdb.inbound;
 
+import org.opencredo.couchdb.core.ChangedDocument;
+import org.opencredo.couchdb.core.CouchDbChangesOperations;
+import org.opencredo.couchdb.core.CouchDbChangesTemplate;
 import org.springframework.integration.Message;
 import org.springframework.integration.context.IntegrationObjectSupport;
 import org.springframework.integration.core.MessageSource;
@@ -41,10 +44,10 @@ public class CouchDbChangesPollingMessageSource extends IntegrationObjectSupport
 
     private final Queue<ChangedDocument> toBeReceived;
 
-    private final ChangesPoller changesPoller;
+    private final CouchDbChangesOperations couchDbChangesOperations;
 
-    public CouchDbChangesPollingMessageSource(ChangesPoller changesPoller) {
-        this.changesPoller = changesPoller;
+    public CouchDbChangesPollingMessageSource(CouchDbChangesOperations couchDbChangesOperations) {
+        this.couchDbChangesOperations = couchDbChangesOperations;
         this.toBeReceived = new PriorityBlockingQueue<ChangedDocument>(
                 DEFAULT_INTERNAL_QUEUE_CAPACITY, new Comparator<ChangedDocument>() {
                     public int compare(ChangedDocument doc1, ChangedDocument doc2) {
@@ -59,12 +62,12 @@ public class CouchDbChangesPollingMessageSource extends IntegrationObjectSupport
     }
 
     public CouchDbChangesPollingMessageSource(String databaseUrl) {
-        this(new DefaultChangesPoller(databaseUrl, new RestTemplate()));
+        this(new CouchDbChangesTemplate(databaseUrl));
     }
 
     public Message<URI> receive() {
         if (toBeReceived.isEmpty()) {
-            Collection<ChangedDocument> changedDocuments = changesPoller.pollForChanges();
+            Collection<ChangedDocument> changedDocuments = couchDbChangesOperations.pollForChanges();
             toBeReceived.addAll(changedDocuments);
         }
 

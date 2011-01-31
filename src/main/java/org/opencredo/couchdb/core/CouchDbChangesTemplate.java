@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package org.opencredo.couchdb.inbound;
+package org.opencredo.couchdb.core;
 
 import org.opencredo.couchdb.CouchDbUtils;
 import org.springframework.integration.MessagingException;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -34,23 +35,30 @@ import java.util.Set;
  * @author Tomas Lukosius
  * @since 24/01/2011
  */
-public class DefaultChangesPoller implements ChangesPoller {
+public class CouchDbChangesTemplate implements CouchDbChangesOperations {
 
     private final RestOperations restOperations;
 
     private final String databaseUrl;
 
+    private final String databaseChangesUrl;
+
     private long currentSequence = 0L;
 
-    public DefaultChangesPoller(String databaseUrl, RestOperations restOperations) {
+    public CouchDbChangesTemplate(String databaseUrl, RestOperations restOperations) {
         Assert.hasText(databaseUrl, "databaseUrl must not be empty");
         Assert.notNull(restOperations, "restOperations cannot be null");
-        this.databaseUrl = databaseUrl;
         this.restOperations = restOperations;
+        this.databaseUrl = databaseUrl;
+        databaseChangesUrl = CouchDbUtils.addChangesSince(databaseUrl);
+    }
+
+    public CouchDbChangesTemplate(String databaseUrl) {
+        this(databaseUrl, new RestTemplate());
     }
 
     public Collection<ChangedDocument> pollForChanges() {
-        Changes changes = restOperations.getForObject(CouchDbUtils.addChangesSince(databaseUrl),
+        Changes changes = restOperations.getForObject(databaseChangesUrl,
                 Changes.class, currentSequence);
 
         Long lastSequence = changes.getLast_seq();
@@ -58,7 +66,9 @@ public class DefaultChangesPoller implements ChangesPoller {
             Collection<ChangedDocument> changedDocuments = prepareChanges(changes);
             currentSequence = lastSequence;
             return changedDocuments;
-        } else return Collections.EMPTY_SET;
+        } else {
+            return Collections.EMPTY_SET;
+        }
     }
 
     private Collection<ChangedDocument> prepareChanges(Changes changes) {
@@ -69,7 +79,6 @@ public class DefaultChangesPoller implements ChangesPoller {
                 URI uri = new URI(CouchDbUtils.ensureTrailingSlash(databaseUrl) + change.getId());
                 ChangedDocument.Status status = determineStatus(change);
                 changedDocuments.add(new ChangedDocument(uri, status, change.getSeq()));
-
             } catch (URISyntaxException e) {
                 throw new MessagingException("unable to create URI for [" + change + "]", e);
             }

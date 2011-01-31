@@ -25,14 +25,14 @@
 
     <si:channel id="input"/>
 
-    <si-couchdb:id-to-document-transformer id="documentConverter" database-url="http://test"
+    <si-couchdb:id-to-document-transformer id="documentConverter"
                                            document-type="org.opencredo.couchdb.DummyDocument"
                                            input-channel="input"
-                                           rest-operations="restOperations"/>
+                                           document-operations="documentOperations"/>
 
 
-    <bean id="restOperations" class="org.mockito.Mockito" factory-method="mock">
-        <constructor-arg value="org.springframework.web.client.RestOperations"/>
+    <bean id="documentOperations" class="org.mockito.Mockito" factory-method="mock">
+        <constructor-arg value="org.opencredo.couchdb.core.CouchDbDocumentOperations"/>
     </bean>
 
     <bean class="org.springframework.integration.core.MessagingTemplate">

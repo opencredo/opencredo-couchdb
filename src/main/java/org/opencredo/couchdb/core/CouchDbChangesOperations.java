@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package org.opencredo.couchdb.inbound;
+package org.opencredo.couchdb.core;
+
+import org.opencredo.couchdb.core.ChangedDocument;
 
 import java.util.Collection;
 
@@ -25,7 +27,7 @@ import java.util.Collection;
  * @author Tareq Abedrabbo
  * @since 24/01/2011
  */
-public interface ChangesPoller {
+public interface CouchDbChangesOperations {
 
     /**
      * Polls a database for changes.

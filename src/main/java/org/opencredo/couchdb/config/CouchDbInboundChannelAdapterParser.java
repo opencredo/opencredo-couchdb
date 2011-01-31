@@ -26,7 +26,7 @@ import org.springframework.integration.config.xml.AbstractPollingInboundChannelA
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
-import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_CHANGES_POLLER;
+import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_CHANGES_OPERATIONS_ATTRIBUTE;
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DATABASE_URL_ATTRIBUTE;
 
 /**
@@ -40,21 +40,22 @@ public class CouchDbInboundChannelAdapterParser extends AbstractPollingInboundCh
                 genericBeanDefinition(CouchDbChangesPollingMessageSource.class);
 
         String databaseUrl = element.getAttribute(COUCHDB_DATABASE_URL_ATTRIBUTE);
-        String changesPoller = element.getAttribute(COUCHDB_CHANGES_POLLER);
+        String changesOperations = element.getAttribute(COUCHDB_CHANGES_OPERATIONS_ATTRIBUTE);
 
         if (StringUtils.hasText(databaseUrl)) {
-            if (StringUtils.hasText(changesPoller)) {
+            if (StringUtils.hasText(changesOperations)) {
                 parserContext.getReaderContext().error(
                         "At most one of '" + COUCHDB_DATABASE_URL_ATTRIBUTE + "' and '" +
-                                COUCHDB_CHANGES_POLLER + "' may be provided.", element);
+                                COUCHDB_CHANGES_OPERATIONS_ATTRIBUTE + "' may be provided.", element);
+            } else {
+                builder.addConstructorArgValue(databaseUrl);
             }
-            builder.addConstructorArgValue(databaseUrl);
-        } else if (StringUtils.hasText(changesPoller)) {
-            builder.addConstructorArgReference(changesPoller);
+        } else if (StringUtils.hasText(changesOperations)) {
+            builder.addConstructorArgReference(changesOperations);
         } else {
             parserContext.getReaderContext().error(
                     "Either '" + COUCHDB_DATABASE_URL_ATTRIBUTE + "' or '" +
-                            COUCHDB_CHANGES_POLLER + "' must be provided.", element);
+                            COUCHDB_CHANGES_OPERATIONS_ATTRIBUTE + "' must be provided.", element);
         }
 
         String beanName = BeanDefinitionReaderUtils.registerWithGeneratedName(

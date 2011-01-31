@@ -16,13 +16,12 @@
 
 package org.opencredo.couchdb.transformer;
 
-import org.opencredo.couchdb.CouchDbUtils;
+import org.opencredo.couchdb.core.CouchDbDocumentOperations;
+import org.opencredo.couchdb.core.CouchDbDocumentTemplate;
 import org.springframework.integration.Message;
 import org.springframework.integration.MessageHandlingException;
 import org.springframework.integration.transformer.AbstractTransformer;
 import org.springframework.util.Assert;
-import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
 
@@ -36,21 +35,18 @@ import java.util.UUID;
  */
 public class CouchDbIdToDocumentTransformer extends AbstractTransformer{
 
-    private final RestOperations restOperations;
-    private final String databaseUrl;
+    private final CouchDbDocumentOperations couchDbDocumentOperations;
     private final Class<?> documentType;
 
-    public CouchDbIdToDocumentTransformer(String databaseUrl, Class<?> documentType, RestOperations restOperations) {
-        Assert.hasText(databaseUrl, "databaseUrl cannot be empty");
+    public CouchDbIdToDocumentTransformer(Class<?> documentType, CouchDbDocumentOperations couchDbDocumentOperations) {
         Assert.notNull(documentType, "documentType cannot be null");
-        Assert.notNull(restOperations, "restTemplate cannot be null");
-        this.databaseUrl = CouchDbUtils.addId(databaseUrl);
+        Assert.notNull(couchDbDocumentOperations, "couchDbDocumentOperations cannot be null");
         this.documentType = documentType;
-        this.restOperations = restOperations;
+        this.couchDbDocumentOperations = couchDbDocumentOperations;
     }
 
-    public CouchDbIdToDocumentTransformer(String databaseUrl, Class<?> documentType) {
-        this(databaseUrl, documentType, new RestTemplate());
+    public CouchDbIdToDocumentTransformer(Class<?> documentType, String databaseUrl) {
+        this(documentType, new CouchDbDocumentTemplate(databaseUrl));
     }
 
     @Override
@@ -69,7 +65,7 @@ public class CouchDbIdToDocumentTransformer extends AbstractTransformer{
                     + payload + "] to a CouchDB id.");
         }
 
-        return restOperations.getForObject(databaseUrl, documentType, id);
+        return couchDbDocumentOperations.readDocument(id, documentType);
     }
 
 }

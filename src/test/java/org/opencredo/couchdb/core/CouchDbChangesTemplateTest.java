@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package org.opencredo.couchdb.inbound;
+package org.opencredo.couchdb.core;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.opencredo.couchdb.core.ChangedDocument;
+import org.opencredo.couchdb.core.CouchDbChangesTemplate;
 import org.springframework.web.client.RestOperations;
 
 import java.util.ArrayList;
@@ -33,26 +35,26 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.opencredo.couchdb.inbound.DefaultChangesPoller.Change;
-import static org.opencredo.couchdb.inbound.DefaultChangesPoller.Changes;
-import static org.opencredo.couchdb.inbound.DefaultChangesPoller.Revision;
+import static org.opencredo.couchdb.core.CouchDbChangesTemplate.Change;
+import static org.opencredo.couchdb.core.CouchDbChangesTemplate.Changes;
+import static org.opencredo.couchdb.core.CouchDbChangesTemplate.Revision;
 
 
 /**
  * @author Tareq Abedrabbo
  * @since 24/01/2011
  */
-public class DefaultChangesPollerTest {
+public class CouchDbChangesTemplateTest {
 
     private static final int NUMBER_OF_CHANGES = 10;
 
-    private DefaultChangesPoller changesPoller;
+    private CouchDbChangesTemplate changesTemplate;
     private RestOperations restOperations;
 
     @Before
     public void setUp() throws Exception {
         restOperations = mock(RestOperations.class);
-        changesPoller = new DefaultChangesPoller("test", restOperations);
+        changesTemplate = new CouchDbChangesTemplate("test", restOperations);
     }
 
     @Test
@@ -60,7 +62,7 @@ public class DefaultChangesPollerTest {
         when(restOperations.getForObject(anyString(), eq(Changes.class), eq(Long.valueOf(0L)))).
                 thenReturn(createChanges(NUMBER_OF_CHANGES));
 
-        Collection<ChangedDocument> documents = changesPoller.pollForChanges();
+        Collection<ChangedDocument> documents = changesTemplate.pollForChanges();
         assertThat(documents, is(notNullValue()));
         assertThat(documents.size(), equalTo(NUMBER_OF_CHANGES));
     }

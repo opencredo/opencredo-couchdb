@@ -20,16 +20,15 @@ import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opencredo.couchdb.DummyDocument;
+import org.opencredo.couchdb.core.CouchDbDocumentOperations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.core.MessagingTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.RestOperations;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
@@ -42,7 +41,7 @@ import static org.mockito.Mockito.when;
 public class CouchDbIdToDocumentTransformerNamespaceTest {
 
     @Autowired
-    private RestOperations restOperations;
+    private CouchDbDocumentOperations documentOperations;
 
     @Autowired
     private MessagingTemplate messagingTemplate;
@@ -51,7 +50,7 @@ public class CouchDbIdToDocumentTransformerNamespaceTest {
     public void transformStringId() throws Exception {
         String id = "id";
         DummyDocument document = new DummyDocument("test");
-        when(restOperations.getForObject(anyString(), eq(DummyDocument.class), eq(id))).thenReturn(document);
+        when(documentOperations.readDocument(eq(id), eq(DummyDocument.class))).thenReturn(document);
         Object response = messagingTemplate.convertSendAndReceive(id);
         assertThat(response, instanceOf(DummyDocument.class));
         DummyDocument responseDocument = (DummyDocument) response;
@@ -60,6 +59,6 @@ public class CouchDbIdToDocumentTransformerNamespaceTest {
 
     @After
     public void tearDown() throws Exception {
-        reset(restOperations);
+        reset(documentOperations);
     }
 }

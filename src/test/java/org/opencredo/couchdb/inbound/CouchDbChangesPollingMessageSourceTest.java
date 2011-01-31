@@ -18,6 +18,8 @@ package org.opencredo.couchdb.inbound;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.opencredo.couchdb.core.ChangedDocument;
+import org.opencredo.couchdb.core.CouchDbChangesOperations;
 import org.springframework.integration.Message;
 
 import java.net.URI;
@@ -43,19 +45,19 @@ public class CouchDbChangesPollingMessageSourceTest {
 
 
     private static final int NUMBER_OF_CHANGES = 10;
-    private ChangesPoller changesPoller;
+    private CouchDbChangesOperations couchDbChangesOperations;
 
     private CouchDbChangesPollingMessageSource messageSource;
 
     @Before
     public void setUp() throws Exception {
-        changesPoller = mock(ChangesPoller.class);
-        messageSource = new CouchDbChangesPollingMessageSource(changesPoller);
+        couchDbChangesOperations = mock(CouchDbChangesOperations.class);
+        messageSource = new CouchDbChangesPollingMessageSource(couchDbChangesOperations);
     }
 
     @Test
     public void receiveOnNonEmptyPoll() throws Exception {
-        when(changesPoller.pollForChanges()).thenReturn(createChangedDocuments(NUMBER_OF_CHANGES));
+        when(couchDbChangesOperations.pollForChanges()).thenReturn(createChangedDocuments(NUMBER_OF_CHANGES));
         for (int i = 0; i < NUMBER_OF_CHANGES; i++) {
             Message<URI> message = messageSource.receive();
             assertThat(message, is(notNullValue()));
@@ -64,7 +66,7 @@ public class CouchDbChangesPollingMessageSourceTest {
 
     @Test
     public void receiveOnEmptyPoll() throws Exception {
-        when(changesPoller.pollForChanges()).thenReturn(Collections.<ChangedDocument>emptySet());
+        when(couchDbChangesOperations.pollForChanges()).thenReturn(Collections.<ChangedDocument>emptySet());
         Message<URI> message = messageSource.receive();
         assertThat(message, is(nullValue()));
     }

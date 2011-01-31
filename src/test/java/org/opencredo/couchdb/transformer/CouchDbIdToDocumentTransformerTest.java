@@ -19,6 +19,7 @@ package org.opencredo.couchdb.transformer;
 import org.junit.Before;
 import org.junit.Test;
 import org.opencredo.couchdb.DummyDocument;
+import org.opencredo.couchdb.core.CouchDbDocumentOperations;
 import org.springframework.integration.Message;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.web.client.RestOperations;
@@ -39,20 +40,20 @@ import static org.mockito.Mockito.when;
 public class CouchDbIdToDocumentTransformerTest {
 
     private CouchDbIdToDocumentTransformer transformer;
-    private RestOperations restOperations;
+    private CouchDbDocumentOperations documentOperations;
     
 
     @Before
     public void setUp() throws Exception {
-        restOperations = mock(RestOperations.class);
-        transformer = new CouchDbIdToDocumentTransformer("xxx", DummyDocument.class, restOperations);
+        documentOperations = mock(CouchDbDocumentOperations.class);
+        transformer = new CouchDbIdToDocumentTransformer(DummyDocument.class, documentOperations);
     }
 
     @Test
     public void transformSimpleMessage() throws Exception {
         String uuid = UUID.randomUUID().toString();
         DummyDocument document = new DummyDocument("test");
-        when(restOperations.getForObject(anyString(), eq(DummyDocument.class), eq(uuid))).thenReturn(document);
+        when(documentOperations.readDocument(eq(uuid), eq(DummyDocument.class))).thenReturn(document);
 
 
         Message<String> message = MessageBuilder.withPayload(uuid).build();
