@@ -18,6 +18,7 @@ package org.opencredo.couchdb.inbound;
 
 import org.opencredo.couchdb.CouchDbUtils;
 import org.springframework.integration.MessagingException;
+import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
 
 import java.net.URI;
@@ -35,7 +36,6 @@ import java.util.Set;
  */
 public class DefaultChangesPoller implements ChangesPoller {
 
-
     private final RestOperations restOperations;
 
     private final String databaseUrl;
@@ -43,6 +43,8 @@ public class DefaultChangesPoller implements ChangesPoller {
     private long currentSequence = 0L;
 
     public DefaultChangesPoller(String databaseUrl, RestOperations restOperations) {
+        Assert.hasText(databaseUrl, "databaseUrl must not be empty");
+        Assert.notNull(restOperations, "restOperations cannot be null");
         this.databaseUrl = databaseUrl;
         this.restOperations = restOperations;
     }
