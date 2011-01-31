@@ -30,7 +30,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @since 17/01/2011
  */
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
 public class CouchDbOutboundChannelAdapterTest extends CouchDbIntegrationTest {
 

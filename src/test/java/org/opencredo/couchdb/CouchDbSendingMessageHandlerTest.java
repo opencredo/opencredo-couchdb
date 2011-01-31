@@ -21,21 +21,20 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.Message;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.test.context.ContextConfiguration;
 
 /**
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 11/01/2011
  */
+@ContextConfiguration
 public class CouchDbSendingMessageHandlerTest extends CouchDbIntegrationTest {
 
+    @Autowired
     private CouchDbSendingMessageHandler messageHandler;
-
-    @Before
-    public void setUp() {
-        messageHandler = new CouchDbSendingMessageHandler(databaseUrl);
-    }
 
     @Test
     public void handleMessage() throws Exception {

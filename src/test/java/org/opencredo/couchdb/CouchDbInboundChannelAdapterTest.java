@@ -28,6 +28,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.net.URI;
 
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
+
 /**
  * @author Tareq Abedrabbo
  * @since 31/01/2011
@@ -43,9 +46,13 @@ public class CouchDbInboundChannelAdapterTest extends CouchDbIntegrationTest {
 
     @Test
     public void receiveChanges() throws Exception {
-        //TODO make sure there are new changes in the database by inserting a new document
+
+        DummyDocument document = new DummyDocument("hello");
+        putDocument(document);
+
         Message<Object> message = messagingTemplate.receive();
+        assertThat(message, notNullValue());
         Object payload = message.getPayload();
-        Assert.assertThat(payload, Matchers.instanceOf(URI.class));
+        assertThat(payload, instanceOf(URI.class));
     }
 }
