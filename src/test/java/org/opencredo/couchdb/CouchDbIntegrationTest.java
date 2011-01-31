@@ -16,7 +16,6 @@
 
 package org.opencredo.couchdb;
 
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;

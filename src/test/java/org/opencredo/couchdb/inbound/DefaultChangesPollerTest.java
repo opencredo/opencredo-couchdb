@@ -18,8 +18,6 @@ package org.opencredo.couchdb.inbound;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.opencredo.couchdb.inbound.ChangedDocument;
-import org.opencredo.couchdb.inbound.DefaultChangesPoller;
 import org.springframework.web.client.RestOperations;
 
 import java.util.ArrayList;

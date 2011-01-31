@@ -16,9 +16,9 @@
 
 package org.opencredo.couchdb;
 
-import java.util.Date;
-
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+import java.util.Date;
 
 /**
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)

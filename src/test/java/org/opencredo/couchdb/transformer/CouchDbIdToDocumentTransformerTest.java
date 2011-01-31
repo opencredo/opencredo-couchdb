@@ -19,20 +19,18 @@ package org.opencredo.couchdb.transformer;
 import org.junit.Before;
 import org.junit.Test;
 import org.opencredo.couchdb.DummyDocument;
-import org.opencredo.couchdb.transformer.CouchDbIdToDocumentTransformer;
 import org.springframework.integration.Message;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.web.client.RestOperations;
 
 import java.util.UUID;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
 
 /**
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
