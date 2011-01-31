@@ -6,7 +6,7 @@
     <version>0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>opencredo-couchdb</name>
-    <description>OpenCredo CouchDB Spring Integration Extensions</description>
+    <description>OpenCredo CouchDB Spring Integration Support</description>
     <url>http://www.opencredo.org</url>
 
     <parent>
