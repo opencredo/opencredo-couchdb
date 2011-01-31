@@ -20,7 +20,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <bean class="org.opencredo.couchdb.CouchDbSendingMessageHandler">
+    <bean class="org.opencredo.couchdb.outbound.CouchDbSendingMessageHandler">
         <constructor-arg value="#{T(org.opencredo.couchdb.CouchDbIntegrationTest).TEST_DATABASE_URL}"/>
     </bean>
     

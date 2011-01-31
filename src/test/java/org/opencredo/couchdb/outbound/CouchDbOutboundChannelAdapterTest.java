@@ -14,45 +14,35 @@
  * limitations under the License.
  */
 
-package org.opencredo.couchdb;
+package org.opencredo.couchdb.outbound;
 
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.opencredo.couchdb.CouchDbIntegrationTest;
+import org.opencredo.couchdb.DummyDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.Message;
 import org.springframework.integration.core.MessagingTemplate;
+import org.springframework.integration.support.MessageBuilder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.net.URI;
-
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
 /**
- * @author Tareq Abedrabbo
- * @since 31/01/2011
+ * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
+ * @since 17/01/2011
  */
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
-public class CouchDbInboundChannelAdapterTest extends CouchDbIntegrationTest {
+public class CouchDbOutboundChannelAdapterTest extends CouchDbIntegrationTest {
 
     @Autowired
     private MessagingTemplate messagingTemplate;
 
-
     @Test
-    public void receiveChanges() throws Exception {
-
-        DummyDocument document = new DummyDocument("hello");
-        putDocument(document);
-
-        Message<Object> message = messagingTemplate.receive();
-        assertThat(message, notNullValue());
-        Object payload = message.getPayload();
-        assertThat(payload, instanceOf(URI.class));
+    public void sendMessage() {
+        DummyDocument document = new DummyDocument("klaatu berada nikto");
+        Message<DummyDocument> message = MessageBuilder.withPayload(document).build();
+        logger.debug("message id = {}", message.getHeaders().getId());
+        messagingTemplate.send(message);
     }
 }

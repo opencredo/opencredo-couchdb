@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package org.opencredo.couchdb;
+package org.opencredo.couchdb.inbound;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.opencredo.couchdb.inbound.ChangedDocument;
+import org.opencredo.couchdb.inbound.DefaultChangesPoller;
 import org.springframework.web.client.RestOperations;
 
 import java.util.ArrayList;
@@ -33,9 +35,9 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.opencredo.couchdb.DefaultChangesPoller.Change;
-import static org.opencredo.couchdb.DefaultChangesPoller.Changes;
-import static org.opencredo.couchdb.DefaultChangesPoller.Revision;
+import static org.opencredo.couchdb.inbound.DefaultChangesPoller.Change;
+import static org.opencredo.couchdb.inbound.DefaultChangesPoller.Changes;
+import static org.opencredo.couchdb.inbound.DefaultChangesPoller.Revision;
 
 
 /**

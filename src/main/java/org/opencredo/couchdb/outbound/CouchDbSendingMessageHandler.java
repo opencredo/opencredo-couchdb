@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package org.opencredo.couchdb;
+package org.opencredo.couchdb.outbound;
 
+import org.opencredo.couchdb.CouchDbUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;

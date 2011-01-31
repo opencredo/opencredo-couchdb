@@ -45,7 +45,7 @@
 
     <aop:config>
         <aop:aspect ref="latch">
-            <aop:after method="countDown" pointcut="target(org.opencredo.couchdb.CouchDbSendingMessageHandler) and execution(* *handleMessage(..))"/>
+            <aop:after method="countDown" pointcut="target(org.opencredo.couchdb.outbound.CouchDbSendingMessageHandler) and execution(* *handleMessage(..))"/>
             <aop:before method="await" pointcut="bean(testRequestChannel) and execution(* *send(..))"/>
         </aop:aspect>
     </aop:config>

@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package org.opencredo.couchdb;
+package org.opencredo.couchdb.outbound;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.opencredo.couchdb.CouchDbIntegrationTest;
+import org.opencredo.couchdb.DummyDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.Message;
 import org.springframework.integration.core.MessagingTemplate;

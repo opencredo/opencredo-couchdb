@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package org.opencredo.couchdb;
+package org.opencredo.couchdb.transformer;
 
+import org.opencredo.couchdb.CouchDbUtils;
 import org.springframework.integration.Message;
 import org.springframework.integration.MessageHandlingException;
 import org.springframework.integration.transformer.AbstractTransformer;

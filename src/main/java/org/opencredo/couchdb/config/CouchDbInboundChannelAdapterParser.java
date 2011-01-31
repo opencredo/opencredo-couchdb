@@ -16,7 +16,7 @@
 
 package org.opencredo.couchdb.config;
 
-import org.opencredo.couchdb.CouchDbChangesPollingMessageSource;
+import org.opencredo.couchdb.inbound.CouchDbChangesPollingMessageSource;
 import org.springframework.beans.BeanMetadataElement;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;

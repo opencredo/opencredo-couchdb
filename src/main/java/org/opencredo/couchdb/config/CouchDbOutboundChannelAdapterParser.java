@@ -21,7 +21,7 @@ import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOC
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_ID_EXPRESSION_PROPERTY;
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_REST_OPERATIONS_ATTRIBUTE;
 
-import org.opencredo.couchdb.CouchDbSendingMessageHandler;
+import org.opencredo.couchdb.outbound.CouchDbSendingMessageHandler;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;

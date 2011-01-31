@@ -16,6 +16,7 @@
 
 package org.opencredo.couchdb;
 
+import com.sun.org.apache.xml.internal.serialize.OutputFormat;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
@@ -40,8 +41,8 @@ import static org.junit.Assume.assumeTrue;
 import static org.springframework.http.HttpStatus.OK;
 
 /**
- * Base class for CouchDB integration tests. For the moment we check whether CouchDB is available before each test,
- * in which case the test is executed. If CouchDB or the target database is not available, the test is ignored.
+ * Base class for CouchDB integration tests. Checks whether CouchDB is available before running each test,
+ * in which case the test is executed. If CouchDB is not available, tests are ignored.
  *
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 13/01/2011
@@ -56,12 +57,6 @@ public abstract class CouchDbIntegrationTest {
     public static final String TEST_DATABASE_URL = COUCHDB_URL + "si_couchdb_test/";
 
     protected static final RestTemplate restTemplate = new RestTemplate();
-
-
-    @BeforeClass
-    public static void setUpRestTemplate() {
-        restTemplate.setErrorHandler(new NoopResponseErrorHandler());
-    }
 
     /**
      * This methods ensures that the database is running. Otherwise, the test is ignored.
@@ -80,6 +75,13 @@ public abstract class CouchDbIntegrationTest {
 
     @Before
     public void setUpTestDatabase() throws Exception {
+        RestTemplate template = new RestTemplate();
+        template.setErrorHandler(new DefaultResponseErrorHandler(){
+            @Override
+            public void handleError(ClientHttpResponse response) throws IOException {
+                // do nothing, error status will be handled in the switch statement
+            }
+        });
         ResponseEntity<String> response = restTemplate.getForEntity(TEST_DATABASE_URL, String.class);
         HttpStatus statusCode = response.getStatusCode();
         switch (statusCode) {
@@ -95,11 +97,6 @@ public abstract class CouchDbIntegrationTest {
         }
     }
 
-//    @After
-//    public void cleanUpDatabase() throws Exception {
-//        deleteExisitingTestDatabase();
-//    }
-
     private void deleteExisitingTestDatabase() {
         restTemplate.delete(TEST_DATABASE_URL);
     }
@@ -112,29 +109,19 @@ public abstract class CouchDbIntegrationTest {
      * Reads a CouchDB document and converts it to the expected type.
      */
     protected <T> T getDocument(String id, Class<T> expectedType) {
-        RestTemplate template = new RestTemplate();
         String url = TEST_DATABASE_URL + "{id}";
-        return template.getForObject(url, expectedType, id);
+        return restTemplate.getForObject(url, expectedType, id);
     }
 
     /**
      * Writes a CouchDB document
      */
     protected String putDocument(Object document) {
-        RestTemplate template = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity request = new HttpEntity(document, headers);
         String id = UUID.randomUUID().toString();
-        template.put(TEST_DATABASE_URL + "{id}", request, id);
+        restTemplate.put(TEST_DATABASE_URL + "{id}", request, id);
         return id;
-    }
-
-
-    private static class NoopResponseErrorHandler extends DefaultResponseErrorHandler {
-        @Override
-        public void handleError(ClientHttpResponse response) throws IOException {
-            // do nothing
-        }
     }
 }

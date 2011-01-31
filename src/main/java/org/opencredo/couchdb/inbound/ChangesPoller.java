@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.opencredo.couchdb;
+package org.opencredo.couchdb.inbound;
 
 import java.util.Collection;
 

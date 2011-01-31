@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package org.opencredo.couchdb;
+package org.opencredo.couchdb.inbound;
 
+import org.opencredo.couchdb.CouchDbUtils;
+import org.opencredo.couchdb.inbound.ChangedDocument;
+import org.opencredo.couchdb.inbound.ChangesPoller;
 import org.springframework.integration.MessagingException;
 import org.springframework.web.client.RestOperations;
 

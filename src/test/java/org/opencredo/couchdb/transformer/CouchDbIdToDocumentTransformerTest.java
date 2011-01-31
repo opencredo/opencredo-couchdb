@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-package org.opencredo.couchdb;
+package org.opencredo.couchdb.transformer;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.opencredo.couchdb.DummyDocument;
+import org.opencredo.couchdb.transformer.CouchDbIdToDocumentTransformer;
 import org.springframework.integration.Message;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.web.client.RestOperations;
