@@ -131,4 +131,31 @@
         </xsd:complexType>
     </xsd:element>
 
+    <xsd:element name="inbound-channel-adapter">
+        <xsd:annotation>
+            <xsd:documentation>
+                Configures an inbound Channel Adapter that polls the changes on a CouchDB database
+                and sends Messages whose payloads are instances of java.net.URI representing a changed document
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="integration:poller" minOccurs="0" maxOccurs="1"/>
+            </xsd:sequence>
+            <xsd:attribute name="database-url" type="xsd:string"/>
+            <xsd:attribute name="changes-poller" type="xsd:string"/>
+            <xsd:attribute name="id" type="xsd:string"/>
+            <xsd:attribute name="channel" type="xsd:string">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <tool:annotation kind="ref">
+                            <tool:expected-type type="org.springframework.integration.core.MessageChannel"/>
+                        </tool:annotation>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="auto-startup" type="xsd:string" default="true"/>
+        </xsd:complexType>
+    </xsd:element>
+
 </xsd:schema>

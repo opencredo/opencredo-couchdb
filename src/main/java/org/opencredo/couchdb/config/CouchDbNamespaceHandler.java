@@ -29,5 +29,6 @@ public class CouchDbNamespaceHandler extends NamespaceHandlerSupport {
     public void init() {
         registerBeanDefinitionParser("outbound-channel-adapter", new CouchDbOutboundChannelAdapterParser());
         registerBeanDefinitionParser("id-to-document-transformer", new CouchDbIdToDocumentTransformerParser());
+        registerBeanDefinitionParser("inbound-channel-adapter", new CouchDbInboundChannelAdapterParser());
     }
 }
