@@ -19,16 +19,50 @@ package org.opencredo.couchdb.core;
 import java.net.URI;
 
 /**
+ * CouchDB operations that allow to read and write documents from and to the database.
+ *
  * @author Tareq Abedrabbo
  * @since 31/01/2011
  */
 public interface CouchDbDocumentOperations {
 
+    /**
+     * Reads a document from the database and maps it a Java object.
+     * </p>
+     * This method is intended to work when a default database
+     * is set on the CouchDbDocumentOperations instance.
+     *
+     * @param id           the id of the CouchDB document to read
+     * @param documentType the target type to map to
+     * @return the mapped object
+     */
     Object readDocument(String id, Class<?> documentType);
 
+    /**
+     * Reads a document from the database and maps it a Java object.
+     *
+     * @param uri          the full URI of the document to read
+     * @param documentType the target type to map to
+     * @return the mapped object
+     */
     Object readDocument(URI uri, Class<?> documentType);
 
+    /**
+     * Maps a Java object to JSON and writes it to the database
+     * </p>
+     * This method is intended to work when a default database
+     * is set on the CouchDbDocumentOperations instance.
+     *
+     * @param id       the id of the document to write
+     * @param document the object to write
+     */
     void writeDocument(String id, Object document);
 
+    /**
+     * Maps a Java object to JSON and writes it to the database
+     *
+     * @param uri      the full URI of the document to write
+     * @param document the object to write
+     */
     void writeDocument(URI uri, Object document);
 }

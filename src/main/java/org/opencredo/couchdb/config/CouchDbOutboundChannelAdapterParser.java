@@ -30,8 +30,7 @@ import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOC
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_OPERATIONS_ATTRIBUTE;
 
 /**
- * Parser for the "outbound-channel-adapter" element, part of the CouchDB namespace support.
- *
+ * BeanDefinitionParser for the outbound-channel-adapter element.
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 17/01/2011
  */

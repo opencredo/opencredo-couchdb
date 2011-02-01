@@ -31,6 +31,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
+ * An implementation of CouchDbChangesOperations that relies on a RestOperations to communicate
+ * with CouchDB.
+ *
  * @author Tareq Abedrabbo
  * @author Tomas Lukosius
  * @since 24/01/2011
@@ -45,6 +48,12 @@ public class CouchDbChangesTemplate implements CouchDbChangesOperations {
 
     private long currentSequence = 0L;
 
+    /**
+     * Constructs an instance of CouchDbChangesTemplate with a default database and a
+     * custom RestOperations
+     * @param databaseUrl the default database to connect to
+     * @param restOperations a custom RestOperations instance
+     */
     public CouchDbChangesTemplate(String databaseUrl, RestOperations restOperations) {
         Assert.hasText(databaseUrl, "databaseUrl must not be empty");
         Assert.notNull(restOperations, "restOperations cannot be null");

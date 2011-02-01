@@ -23,12 +23,12 @@ import org.springframework.integration.config.xml.AbstractTransformerParser;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
-import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_CHANGES_OPERATIONS_ATTRIBUTE;
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DATABASE_URL_ATTRIBUTE;
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_OPERATIONS_ATTRIBUTE;
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_TYPE_ATTRIBUTE;
 
 /**
+ * BeanDefinitionParser for the id-to-document-transformer element.
  * @author Tareq Abedrabbo
  * @since 25/01/2011
  */

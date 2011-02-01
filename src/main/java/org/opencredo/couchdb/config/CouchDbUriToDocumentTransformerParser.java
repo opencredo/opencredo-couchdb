@@ -27,6 +27,7 @@ import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOC
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOCUMENT_TYPE_ATTRIBUTE;
 
 /**
+ * BeanDefinitionParser for the uri-to-document-transformer element.
  * @author Tareq Abedrabbo
  * @since 01/02/2011
  */

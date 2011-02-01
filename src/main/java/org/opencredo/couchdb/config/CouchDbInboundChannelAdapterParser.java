@@ -30,6 +30,7 @@ import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_CHA
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DATABASE_URL_ATTRIBUTE;
 
 /**
+ * BeanDefinitionParser for the inbound-channel-adapter element.
  * @author Tareq Abedrabbo
  * @since 25/01/2011
  */

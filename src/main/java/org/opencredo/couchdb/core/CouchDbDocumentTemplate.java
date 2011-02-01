@@ -29,6 +29,9 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 
 /**
+ * An implementation of CouchDbDocumentOperations that relies on RestOperations to communicate
+ * with CouchDB
+ * 
  * @author Tareq Abedrabbo
  * @since 31/01/2011
  */
@@ -43,6 +46,10 @@ public class CouchDbDocumentTemplate implements CouchDbDocumentOperations {
     public CouchDbDocumentTemplate() {
     }
 
+    /**
+     * Creates an instance of CouchDbDocumentTemplate with a default database URL
+     * @param defaultDatabaseUrl the default URL to communicate with
+     */
     public CouchDbDocumentTemplate(String defaultDatabaseUrl) {
         Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
         defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
@@ -84,6 +91,7 @@ public class CouchDbDocumentTemplate implements CouchDbDocumentOperations {
         return httpEntity;
     }
 
+    /** Sets the RestOperations instance to use */
     public void setRestOperations(RestOperations restOperations) {
         this.restOperations = restOperations;
     }
