@@ -40,7 +40,7 @@ import java.util.Set;
  */
 public class CouchDbChangesTemplate implements CouchDbChangesOperations {
 
-    private final RestOperations restOperations;
+    private RestOperations restOperations;
 
     private final String databaseUrl;
 
@@ -78,6 +78,11 @@ public class CouchDbChangesTemplate implements CouchDbChangesOperations {
         } else {
             return Collections.EMPTY_SET;
         }
+    }
+
+    /** Sets RestOperations */
+    public void setRestOperations(RestOperations restOperations) {
+        this.restOperations = restOperations;
     }
 
     private Collection<ChangedDocument> prepareChanges(Changes changes) {

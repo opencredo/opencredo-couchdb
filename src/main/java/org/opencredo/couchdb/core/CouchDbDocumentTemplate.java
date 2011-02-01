@@ -43,7 +43,25 @@ public class CouchDbDocumentTemplate implements CouchDbDocumentOperations {
 
     private String defaultDocumentUrl;
 
+
+    /**
+     * Creates an instance of CouchDbDocumentTemplate with no default database.
+     */
     public CouchDbDocumentTemplate() {
+        restOperations = new RestTemplate();
+    }
+
+    /**
+     * Constructs an instance of CouchDbDocumentTemplate with a default database and a
+     * custom RestOperations
+     * @param defaultDatabaseUrl the default database to connect to
+     * @param restOperations a custom RestOperations instance
+     */
+    public CouchDbDocumentTemplate(String defaultDatabaseUrl, RestOperations restOperations) {
+        Assert.hasText(defaultDatabaseUrl, "databaseUrl must not be empty");
+        Assert.notNull(restOperations, "restOperations cannot be null");
+        this.restOperations = restOperations;
+        defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
     }
 
     /**
@@ -51,8 +69,7 @@ public class CouchDbDocumentTemplate implements CouchDbDocumentOperations {
      * @param defaultDatabaseUrl the default URL to communicate with
      */
     public CouchDbDocumentTemplate(String defaultDatabaseUrl) {
-        Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
-        defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
+        this(defaultDatabaseUrl, new RestTemplate());
     }
 
     public Object readDocument(String id, Class<?> documentType) {
@@ -75,6 +92,11 @@ public class CouchDbDocumentTemplate implements CouchDbDocumentOperations {
         restOperations.put(uri, httpEntity);
     }
 
+    /** Sets RestOperations */
+    public void setRestOperations(RestOperations restOperations) {
+        this.restOperations = restOperations;
+    }
+
     private HttpEntity<?> createHttpEntity(Object document) {
 
         if (document instanceof HttpEntity) {
@@ -89,10 +111,5 @@ public class CouchDbDocumentTemplate implements CouchDbDocumentOperations {
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(document, httpHeaders);
 
         return httpEntity;
-    }
-
-    /** Sets the RestOperations instance to use */
-    public void setRestOperations(RestOperations restOperations) {
-        this.restOperations = restOperations;
     }
 }
