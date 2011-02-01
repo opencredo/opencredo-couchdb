@@ -16,9 +16,7 @@
 
 package org.opencredo.couchdb.core;
 
-import org.opencredo.couchdb.core.ChangedDocument;
-
-import java.util.Collection;
+import java.net.URI;
 
 /**
  * @author Tareq Abedrabbo
@@ -28,5 +26,9 @@ public interface CouchDbDocumentOperations {
 
     Object readDocument(String id, Class<?> documentType);
 
+    Object readDocument(URI uri, Class<?> documentType);
+
     void writeDocument(String id, Object document);
+
+    void writeDocument(URI uri, Object document);
 }

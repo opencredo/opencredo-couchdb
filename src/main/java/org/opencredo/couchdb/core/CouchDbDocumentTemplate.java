@@ -26,6 +26,8 @@ import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+
 /**
  * @author Tareq Abedrabbo
  * @since 31/01/2011
@@ -34,30 +36,36 @@ public class CouchDbDocumentTemplate implements CouchDbDocumentOperations {
 
     protected transient final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final RestOperations restOperations;
+    private RestOperations restOperations = new RestTemplate();
 
-    private final String documentUrl;
+    private String defaultDocumentUrl;
 
-    public CouchDbDocumentTemplate(String databaseUrl, RestOperations restOperations) {
-        Assert.hasText(databaseUrl, "databaseUrl must not be empty");
-        Assert.notNull(restOperations, "restOperations cannot be null");
-        this.restOperations = restOperations;
-        documentUrl = CouchDbUtils.addId(databaseUrl);
+    public CouchDbDocumentTemplate() {
     }
 
-    public CouchDbDocumentTemplate(String databaseUrl) {
-        this(databaseUrl, new RestTemplate());
+    public CouchDbDocumentTemplate(String defaultDatabaseUrl) {
+        Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
+        defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
     }
 
     public Object readDocument(String id, Class<?> documentType) {
-        return restOperations.getForObject(documentUrl, documentType, id);
+        Assert.state(defaultDocumentUrl != null, "defaultDatabaseUrl must be set to use this method");
+        return restOperations.getForObject(defaultDocumentUrl, documentType, id);
+    }
+
+    public Object readDocument(URI uri, Class<?> documentType) {
+        return restOperations.getForObject(uri, documentType);
     }
 
     public void writeDocument(String id, Object document) {
+        Assert.state(defaultDocumentUrl != null, "defaultDatabaseUrl must be set to use this method");
         HttpEntity<?> httpEntity = createHttpEntity(document);
+        restOperations.put(defaultDocumentUrl, httpEntity, id);
+    }
 
-        logger.debug("sending message to CouchDB [{}]", httpEntity.getBody());
-        restOperations.put(documentUrl, httpEntity, id);
+    public void writeDocument(URI uri, Object document) {
+        HttpEntity<?> httpEntity = createHttpEntity(document);
+        restOperations.put(uri, httpEntity);
     }
 
     private HttpEntity<?> createHttpEntity(Object document) {
@@ -74,5 +82,9 @@ public class CouchDbDocumentTemplate implements CouchDbDocumentOperations {
         HttpEntity<Object> httpEntity = new HttpEntity<Object>(document, httpHeaders);
 
         return httpEntity;
+    }
+
+    public void setRestOperations(RestOperations restOperations) {
+        this.restOperations = restOperations;
     }
 }

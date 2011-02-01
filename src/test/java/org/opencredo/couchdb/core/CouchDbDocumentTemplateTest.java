@@ -43,7 +43,8 @@ public class CouchDbDocumentTemplateTest {
     @Before
     public void setUp() throws Exception {
         restOperations = mock(RestOperations.class);
-        documentTemplate = new CouchDbDocumentTemplate("test", restOperations);
+        documentTemplate = new CouchDbDocumentTemplate("test");
+        documentTemplate.setRestOperations(restOperations);
     }
 
     @Test
