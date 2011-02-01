@@ -58,11 +58,11 @@ public class CouchDbIdToDocumentTransformer extends AbstractTransformer{
         }
         else
         if (payload instanceof UUID) {
-            id = ((UUID) payload).toString();
+            id = payload.toString();
         }
         else {
-            throw new MessageHandlingException(message, "Cannot handle transform payload ["
-                    + payload + "] to a CouchDB id.");
+            throw new MessageHandlingException(message, "Cannot transform payload ["
+                    + payload + "] to a CouchDB document");
         }
 
         return couchDbDocumentOperations.readDocument(id, documentType);
