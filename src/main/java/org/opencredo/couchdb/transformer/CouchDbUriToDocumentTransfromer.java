@@ -26,6 +26,12 @@ import org.springframework.util.Assert;
 import java.net.URI;
 
 /**
+ * A message transformer that reads a CouchDB document from the database.
+ * </p>
+ * The payload of the message is expected to contain the full URI of the message to read.
+ * </p>
+ * Once the document read, it is mapped to the Java class specified as documentType in the constructor.
+ *
  * @author Tareq Abedrabbo
  * @since 01/02/2011
  */
@@ -34,6 +40,12 @@ public class CouchDbUriToDocumentTransfromer extends AbstractTransformer {
     private final CouchDbDocumentOperations couchDbDocumentOperations;
     private final Class<?> documentType;
 
+    /**
+     * Creates an instance with a custom CouchDbDocumentOperations.
+     *
+     * @param documentType              the target class to map documents to
+     * @param couchDbDocumentOperations a custom CouchDbDocumentOperations
+     */
     public CouchDbUriToDocumentTransfromer(Class<?> documentType, CouchDbDocumentOperations couchDbDocumentOperations) {
         Assert.notNull(documentType, "documentType cannot be null");
         Assert.notNull(couchDbDocumentOperations, "couchDbDocumentOperations cannot be null");
@@ -42,6 +54,11 @@ public class CouchDbUriToDocumentTransfromer extends AbstractTransformer {
     }
 
 
+    /**
+     * Creates a simple instance.
+     *
+     * @param documentType the target class to map documents to
+     */
     public CouchDbUriToDocumentTransfromer(Class<?> documentType) {
         this(documentType, new CouchDbDocumentTemplate());
     }

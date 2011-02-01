@@ -32,6 +32,12 @@ import java.util.Queue;
 import java.util.concurrent.PriorityBlockingQueue;
 
 /**
+ * A MessageSource that receives messages by polling a CouchDB database. The polling is performed through
+ * a CouchDbChangesOperations, typically using the changes API.
+ * </p>
+ * Each poll returns and stores internally the list of changed documents since the last poll, which means that instances
+ * of this class are stateful.
+ *
  * @author Tareq Abedrabbo
  * @author Tomas Lukosius
  * @since 24/01/2011
@@ -41,11 +47,13 @@ public class CouchDbChangesPollingMessageSource extends IntegrationObjectSupport
 
     private static final int DEFAULT_INTERNAL_QUEUE_CAPACITY = 5;
 
-
     private final Queue<ChangedDocument> toBeReceived;
 
     private final CouchDbChangesOperations couchDbChangesOperations;
 
+    /**
+     * Creates an instance with a custom CouchDbChangesOperations.
+     */
     public CouchDbChangesPollingMessageSource(CouchDbChangesOperations couchDbChangesOperations) {
         this.couchDbChangesOperations = couchDbChangesOperations;
         this.toBeReceived = new PriorityBlockingQueue<ChangedDocument>(
@@ -61,6 +69,9 @@ public class CouchDbChangesPollingMessageSource extends IntegrationObjectSupport
                 });
     }
 
+    /**
+     * Creates an instance with a default database to connect to.
+     */
     public CouchDbChangesPollingMessageSource(String databaseUrl) {
         this(new CouchDbChangesTemplate(databaseUrl));
     }

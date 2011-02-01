@@ -20,10 +20,10 @@ import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.mockito.ArgumentMatcher;
 import org.springframework.http.HttpEntity;
 
 /**
+ * Matches the content of the body of an HttpEntity.
  * @author Tareq Abedrabbo
  * @since 31/01/2011
  */

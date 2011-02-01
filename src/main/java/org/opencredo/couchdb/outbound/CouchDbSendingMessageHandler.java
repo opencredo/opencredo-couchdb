@@ -34,11 +34,11 @@ import org.springframework.util.Assert;
 
 /**
  * A message handler that creates new CouchDB documents from SI messages.
- * The id of the created documents is by default that of the Spring Integration message, but this can be customized using a Spel expression.
- * This handler relies on a RestTemplate to communicate with CouchDB. By default a plain RestTemplate
- * is created but a custom one can be provided using the appropriate constructor.
+ * </p>
+ * The id of the created documents is by default that of the Spring Integration message,
+ * but this can be customized using a SpeL expression.
  *
- * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
+ * @author Tareq Abedrabbo
  * @since 11/01/2011
  */
 public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
@@ -52,13 +52,16 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
     private Expression documentIdExpression;
 
 
+    /**
+     * Creates an instance with a custom CouchDbDocumentOperations.
+     */
     public CouchDbSendingMessageHandler(CouchDbDocumentOperations couchDbDocumentOperations) {
         Assert.notNull(couchDbDocumentOperations, "couchDbDocumentOperations cannot be null");
         this.couchDbDocumentOperations = couchDbDocumentOperations;
     }
 
     /**
-     * Creates a handler instance with the database URL 
+     * Creates a handler instance with a default database URL
      */
     public CouchDbSendingMessageHandler(String databaseUrl) {
         this(new CouchDbDocumentTemplate(databaseUrl));
