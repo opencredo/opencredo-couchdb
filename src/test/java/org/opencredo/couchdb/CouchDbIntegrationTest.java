@@ -16,11 +16,11 @@
 
 package org.opencredo.couchdb;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -50,7 +50,7 @@ import static org.springframework.http.HttpStatus.OK;
 public abstract class CouchDbIntegrationTest {
 
 
-    protected static final Logger logger = LoggerFactory.getLogger(CouchDbIntegrationTest.class);
+    protected static final Log log = LogFactory.getLog(CouchDbIntegrationTest.class);
 
     public static final String COUCHDB_URL = "http://127.0.0.1:5984/";
     public static final String TEST_DATABASE_URL = COUCHDB_URL + "si_couchdb_test/";
@@ -65,9 +65,10 @@ public abstract class CouchDbIntegrationTest {
         try {
             ResponseEntity<String> responseEntity = restTemplate.getForEntity(COUCHDB_URL, String.class);
             assumeTrue(responseEntity.getStatusCode().equals(OK));
-            logger.debug("CouchDB is running on {} with status {} ", COUCHDB_URL, responseEntity.getStatusCode());
+            log.debug("CouchDB is running on " + COUCHDB_URL +
+                    " with status " + responseEntity.getStatusCode());
         } catch (RestClientException e) {
-            logger.debug("CouchDB is not running on {}", COUCHDB_URL);
+            log.debug("CouchDB is not running on " + COUCHDB_URL);
             assumeNoException(e);
         }
     }

@@ -22,13 +22,11 @@ import org.opencredo.couchdb.DummyDocument;
 import org.opencredo.couchdb.core.CouchDbDocumentOperations;
 import org.springframework.integration.Message;
 import org.springframework.integration.support.MessageBuilder;
-import org.springframework.web.client.RestOperations;
 
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;

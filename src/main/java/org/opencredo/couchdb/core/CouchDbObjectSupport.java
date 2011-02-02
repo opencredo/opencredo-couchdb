@@ -16,9 +16,8 @@
 
 package org.opencredo.couchdb.core;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
@@ -30,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
  */
 public abstract class CouchDbObjectSupport {
 
-    protected transient final Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected final Log logger = LogFactory.getLog(this.getClass());
 
     protected RestOperations restOperations = new RestTemplate();
 

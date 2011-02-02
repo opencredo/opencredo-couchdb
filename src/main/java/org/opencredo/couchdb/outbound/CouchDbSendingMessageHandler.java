@@ -18,8 +18,6 @@ package org.opencredo.couchdb.outbound;
 
 import org.opencredo.couchdb.core.CouchDbDocumentOperations;
 import org.opencredo.couchdb.core.CouchDbDocumentTemplate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.core.convert.ConversionService;
@@ -42,8 +40,6 @@ import org.springframework.util.Assert;
  * @since 11/01/2011
  */
 public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
-
-    protected transient final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private static final ExpressionParser expressionParser = new SpelExpressionParser();
 
@@ -84,7 +80,9 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
     @Override
     protected final void handleMessageInternal(Message<?> message) throws Exception {
         String documentId = createDocumentId(message);
-        logger.debug("sending message to CouchDB [{}]", message);
+        if (logger.isDebugEnabled()) {
+            logger.debug("sending message to CouchDB [" + message + "]");
+        }
         couchDbDocumentOperations.writeDocument(documentId, message.getPayload());
     }
 
@@ -95,7 +93,9 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
         } else {
             documentId = documentIdExpression.getValue(evaluationContext, message, String.class);
         }
-        logger.debug("created document id [{}]", documentId);
+        if (logger.isDebugEnabled()) {
+            logger.debug("created document id [" +  documentId + "]");
+        }
         return documentId;
     }
 

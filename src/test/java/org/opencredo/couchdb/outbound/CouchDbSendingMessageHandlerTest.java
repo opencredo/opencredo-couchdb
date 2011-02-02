@@ -41,12 +41,10 @@ public class CouchDbSendingMessageHandlerTest extends CouchDbIntegrationTest {
     public void handleMessage() throws Exception {
         DummyDocument document = new DummyDocument("Klaatu Berada Nikto");
         Message<DummyDocument> message = MessageBuilder.withPayload(document).build();
-        logger.debug("message id = {}", message.getHeaders().getId());
         messageHandler.handleMessage(message);
 
         //assert message in the database
         DummyDocument result = getDocument(message.getHeaders().getId().toString(), DummyDocument.class);
-        logger.debug("result: [{}]", result);
         assertThat(document.getMessage(), equalTo(result.getMessage()));
 
     }
