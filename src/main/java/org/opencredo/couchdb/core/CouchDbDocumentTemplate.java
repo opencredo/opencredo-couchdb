@@ -51,12 +51,12 @@ public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements Cou
         defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
     }
 
-    public Object readDocument(String id, Class<?> documentType) {
+    public <T> T readDocument(String id, Class<T> documentType) {
         Assert.state(defaultDocumentUrl != null, "defaultDatabaseUrl must be set to use this method");
         return restOperations.getForObject(defaultDocumentUrl, documentType, id);
     }
 
-    public Object readDocument(URI uri, Class<?> documentType) {
+    public <T> T readDocument(URI uri, Class<T> documentType) {
         return restOperations.getForObject(uri, documentType);
     }
 

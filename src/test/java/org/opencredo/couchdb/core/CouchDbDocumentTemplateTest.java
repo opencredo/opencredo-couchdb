@@ -19,16 +19,19 @@ package org.opencredo.couchdb.core;
 import org.junit.Before;
 import org.junit.Test;
 import org.opencredo.couchdb.DummyDocument;
-import org.opencredo.couchdb.IsBodyEqual;
 import org.springframework.web.client.RestOperations;
 
+import java.net.URI;
 import java.util.UUID;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.opencredo.couchdb.IsBodyEqual.bodyEqual;
 
 /**
@@ -37,21 +40,50 @@ import static org.opencredo.couchdb.IsBodyEqual.bodyEqual;
  */
 public class CouchDbDocumentTemplateTest {
 
+    protected static final String DEFAULT_DATABASE_URL = "http://test";
     private CouchDbDocumentTemplate documentTemplate;
     private RestOperations restOperations;
 
     @Before
     public void setUp() throws Exception {
         restOperations = mock(RestOperations.class);
-        documentTemplate = new CouchDbDocumentTemplate("test");
+        documentTemplate = new CouchDbDocumentTemplate(DEFAULT_DATABASE_URL);
         documentTemplate.setRestOperations(restOperations);
     }
 
     @Test
-    public void createDocument() throws Exception {
+    public void writeDocumentToDefaultDatabase() throws Exception {
         DummyDocument document = new DummyDocument("hello");
         String id = UUID.randomUUID().toString();
         documentTemplate.writeDocument(id, document);
         verify(restOperations).put(anyString(), argThat(bodyEqual(document)), eq(id));
+    }
+
+    @Test
+    public void writeDocumentToUri() throws Exception {
+        DummyDocument document = new DummyDocument("hello");
+        URI uri = new URI("http://test");
+        documentTemplate.writeDocument(uri, document);
+        verify(restOperations).put(eq(uri), argThat(bodyEqual(document)));
+    }
+
+    @Test
+    public void readDocumentFromDefaultDatabase() throws Exception {
+        String id = UUID.randomUUID().toString();
+        DummyDocument response = new DummyDocument("test");
+        when(restOperations.getForObject(anyString(), eq(DummyDocument.class), eq(id))).
+                thenReturn(response);
+        DummyDocument result = documentTemplate.readDocument(id, DummyDocument.class);
+        assertThat(result, equalTo(response));
+    }
+
+    @Test
+    public void readDocumentFromUri() throws Exception {
+        URI uri = new URI("http://test");
+        DummyDocument response = new DummyDocument("test");
+        when(restOperations.getForObject(eq(uri), eq(DummyDocument.class))).
+                thenReturn(response);
+        DummyDocument result = documentTemplate.readDocument(uri, DummyDocument.class);
+        assertThat(result, equalTo(response));
     }
 }
