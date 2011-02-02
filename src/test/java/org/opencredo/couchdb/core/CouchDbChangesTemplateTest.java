@@ -54,7 +54,8 @@ public class CouchDbChangesTemplateTest {
     @Before
     public void setUp() throws Exception {
         restOperations = mock(RestOperations.class);
-        changesTemplate = new CouchDbChangesTemplate("test", restOperations);
+        changesTemplate = new CouchDbChangesTemplate("test");
+        changesTemplate.setRestOperations(restOperations);
     }
 
     @Test

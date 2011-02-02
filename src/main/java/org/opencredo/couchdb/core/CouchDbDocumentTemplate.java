@@ -17,14 +17,11 @@
 package org.opencredo.couchdb.core;
 
 import org.opencredo.couchdb.CouchDbUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 
@@ -35,41 +32,23 @@ import java.net.URI;
  * @author Tareq Abedrabbo
  * @since 31/01/2011
  */
-public class CouchDbDocumentTemplate implements CouchDbDocumentOperations {
-
-    protected transient final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    private RestOperations restOperations = new RestTemplate();
+public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements CouchDbDocumentOperations {
 
     private String defaultDocumentUrl;
 
-
     /**
-     * Creates an instance of CouchDbDocumentTemplate with no default database.
+     * The default constructor.
      */
     public CouchDbDocumentTemplate() {
-        restOperations = new RestTemplate();
     }
 
     /**
-     * Constructs an instance of CouchDbDocumentTemplate with a default database and a
-     * custom RestOperations
+     * Constructs an instance of CouchDbDocumentTemplate with a default database
      * @param defaultDatabaseUrl the default database to connect to
-     * @param restOperations a custom RestOperations instance
-     */
-    public CouchDbDocumentTemplate(String defaultDatabaseUrl, RestOperations restOperations) {
-        Assert.hasText(defaultDatabaseUrl, "databaseUrl must not be empty");
-        Assert.notNull(restOperations, "restOperations cannot be null");
-        this.restOperations = restOperations;
-        defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
-    }
-
-    /**
-     * Creates an instance of CouchDbDocumentTemplate with a default database URL
-     * @param defaultDatabaseUrl the default URL to communicate with
      */
     public CouchDbDocumentTemplate(String defaultDatabaseUrl) {
-        this(defaultDatabaseUrl, new RestTemplate());
+        Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
+        defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
     }
 
     public Object readDocument(String id, Class<?> documentType) {

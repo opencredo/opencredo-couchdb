@@ -20,7 +20,6 @@ import org.opencredo.couchdb.CouchDbUtils;
 import org.springframework.integration.MessagingException;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -38,32 +37,29 @@ import java.util.Set;
  * @author Tomas Lukosius
  * @since 24/01/2011
  */
-public class CouchDbChangesTemplate implements CouchDbChangesOperations {
+public class CouchDbChangesTemplate extends CouchDbObjectSupport implements CouchDbChangesOperations {
 
-    private RestOperations restOperations;
+    private String databaseUrl;
 
-    private final String databaseUrl;
-
-    private final String databaseChangesUrl;
+    private String databaseChangesUrl;
 
     private long currentSequence = 0L;
 
     /**
-     * Constructs an instance of CouchDbChangesTemplate with a default database and a
-     * custom RestOperations
-     * @param databaseUrl the default database to connect to
-     * @param restOperations a custom RestOperations instance
+     * The default constructor.
      */
-    public CouchDbChangesTemplate(String databaseUrl, RestOperations restOperations) {
-        Assert.hasText(databaseUrl, "databaseUrl must not be empty");
-        Assert.notNull(restOperations, "restOperations cannot be null");
-        this.restOperations = restOperations;
-        this.databaseUrl = databaseUrl;
-        databaseChangesUrl = CouchDbUtils.addChangesSince(databaseUrl);
+    public CouchDbChangesTemplate() {
     }
 
-    public CouchDbChangesTemplate(String databaseUrl) {
-        this(databaseUrl, new RestTemplate());
+    /**
+     * Creates an instance of CouchDbChangesTemplate with a default database.
+     *
+     * @param defaultDatabaseUrl the default database to connect to
+     */
+    public CouchDbChangesTemplate(String defaultDatabaseUrl) {
+        Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
+        this.databaseUrl = defaultDatabaseUrl;
+        databaseChangesUrl = CouchDbUtils.addChangesSince(defaultDatabaseUrl);
     }
 
     public Collection<ChangedDocument> pollForChanges() {
@@ -80,7 +76,9 @@ public class CouchDbChangesTemplate implements CouchDbChangesOperations {
         }
     }
 
-    /** Sets RestOperations */
+    /**
+     * Sets RestOperations
+     */
     public void setRestOperations(RestOperations restOperations) {
         this.restOperations = restOperations;
     }
