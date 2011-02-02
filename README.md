@@ -91,7 +91,7 @@ containing its URI is set to the configured channel.
     </si:channel>
 
     <si-couchdb:inbound-channel-adapter channel="changedDocuments"
-            database-url="http://127.0.0.1:5984/si_couchdb_test/">
+        database-url="http://127.0.0.1:5984/si_couchdb_test/">
         <si:poller fixed-rate="60000"/>
     </si-couchdb:inbound-channel-adapter>
 
@@ -103,9 +103,9 @@ from JSON to Java and therefore your class must be properly formed.
     <si:channel id="input"/>
 
     <si-couchdb:id-to-document-transformer id="documentTransformer"
-                                           database-url="http://127.0.0.1:5984/si_couchdb_test/"
-                                           document-type="org.opencredo.couchdb.DummyDocument"
-                                           input-channel="input"/>
+        database-url="http://127.0.0.1:5984/si_couchdb_test/"
+        document-type="org.opencredo.couchdb.DummyDocument"
+        input-channel="input"/>
 
 ### URI to Document Transformer
 This transformer is similar to the previous one but this time it reads and transforms a CouchDB document
@@ -114,8 +114,8 @@ using its URI provided as the payload of the message under transformation.
     <si:channel id="input"/>
 
     <si-couchdb:uri-to-document-transformer id="documentConverter"
-                                           document-type="org.opencredo.couchdb.DummyDocument"
-                                           input-channel="input"/>
+        document-type="org.opencredo.couchdb.DummyDocument"
+        input-channel="input"/>
 
 # Roadmap
 - Inbound channel adapter state store
