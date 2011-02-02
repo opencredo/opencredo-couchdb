@@ -21,8 +21,11 @@ import org.junit.runner.RunWith;
 import org.opencredo.couchdb.CouchDbIntegrationTest;
 import org.opencredo.couchdb.DummyDocument;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.integration.Message;
+import org.springframework.integration.core.MessageSource;
 import org.springframework.integration.core.MessagingTemplate;
+import org.springframework.integration.endpoint.AbstractEndpoint;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -42,11 +45,18 @@ import static org.junit.Assert.assertThat;
 public class CouchDbInboundChannelAdapterTest extends CouchDbIntegrationTest {
 
     @Autowired
+    @Qualifier("inboundChannelAdapter")
+    private AbstractEndpoint inboundChannelAdapter;
+
+    @Autowired
     private MessagingTemplate messagingTemplate;
 
 
     @Test
     public void receiveChanges() throws Exception {
+
+        // start the poller here to avoid polling CouchDB before it's ready
+        inboundChannelAdapter.start();
 
         DummyDocument document = new DummyDocument("hello");
         putDocument(document);

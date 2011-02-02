@@ -81,7 +81,7 @@ public abstract class CouchDbIntegrationTest {
                 // do nothing, error status will be handled in the switch statement
             }
         });
-        ResponseEntity<String> response = restTemplate.getForEntity(TEST_DATABASE_URL, String.class);
+        ResponseEntity<String> response = template.getForEntity(TEST_DATABASE_URL, String.class);
         HttpStatus statusCode = response.getStatusCode();
         switch (statusCode) {
             case NOT_FOUND:
