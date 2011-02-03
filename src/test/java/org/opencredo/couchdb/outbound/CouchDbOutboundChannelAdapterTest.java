@@ -16,6 +16,8 @@
 
 package org.opencredo.couchdb.outbound;
 
+import org.hamcrest.Matchers;
+import org.junit.Assert;
 import org.junit.Test;
 import org.opencredo.couchdb.CouchDbIntegrationTest;
 import org.opencredo.couchdb.DummyDocument;
@@ -24,6 +26,9 @@ import org.springframework.integration.Message;
 import org.springframework.integration.core.MessagingTemplate;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.test.context.ContextConfiguration;
+
+import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertThat;
 
 /**
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
@@ -41,5 +46,7 @@ public class CouchDbOutboundChannelAdapterTest extends CouchDbIntegrationTest {
         DummyDocument document = new DummyDocument("klaatu berada nikto");
         Message<DummyDocument> message = MessageBuilder.withPayload(document).build();
         messagingTemplate.send(message);
+        DummyDocument response = getDocument("test_id", DummyDocument.class);
+        assertThat(response, equalTo(document));
     }
 }

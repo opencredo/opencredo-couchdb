@@ -12,7 +12,7 @@
 
     <si-couchdb:outbound-channel-adapter id="couchdb" channel="input"
                                          database-url="#{T(org.opencredo.couchdb.CouchDbIntegrationTest).TEST_DATABASE_URL}"
-            document-id-expression="T(java.util.UUID).randomUUID().toString()"/>
+            document-id-expression="'test_id'"/>
 
     <bean class="org.springframework.integration.core.MessagingTemplate">
         <constructor-arg ref="input"/>
