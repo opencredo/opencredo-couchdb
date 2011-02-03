@@ -19,8 +19,8 @@ package org.opencredo.couchdb.transformer;
 import org.opencredo.couchdb.core.CouchDbDocumentOperations;
 import org.opencredo.couchdb.core.CouchDbDocumentTemplate;
 import org.springframework.integration.Message;
-import org.springframework.integration.MessageHandlingException;
 import org.springframework.integration.transformer.AbstractTransformer;
+import org.springframework.integration.transformer.MessageTransformationException;
 import org.springframework.util.Assert;
 
 import java.util.UUID;
@@ -72,7 +72,7 @@ public class CouchDbIdToDocumentTransformer extends AbstractTransformer {
         } else if (payload instanceof UUID) {
             id = payload.toString();
         } else {
-            throw new MessageHandlingException(message, "Cannot transform payload ["
+            throw new MessageTransformationException(message, "Cannot transform payload ["
                     + payload + "] to a CouchDB document");
         }
 
