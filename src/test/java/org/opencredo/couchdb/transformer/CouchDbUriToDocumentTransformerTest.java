@@ -22,6 +22,7 @@ import org.opencredo.couchdb.DummyDocument;
 import org.opencredo.couchdb.core.CouchDbDocumentOperations;
 import org.springframework.integration.Message;
 import org.springframework.integration.support.MessageBuilder;
+import org.springframework.integration.transformer.MessageTransformationException;
 
 import java.net.URI;
 import java.util.UUID;
@@ -40,7 +41,7 @@ public class CouchDbUriToDocumentTransformerTest {
 
     private CouchDbUriToDocumentTransfromer transformer;
     private CouchDbDocumentOperations documentOperations;
-    
+
 
     @Before
     public void setUp() throws Exception {
@@ -49,7 +50,7 @@ public class CouchDbUriToDocumentTransformerTest {
     }
 
     @Test
-    public void transformSimpleMessage() throws Exception {
+    public void transformUriMessage() throws Exception {
         URI uri = new URI("http://test");
         DummyDocument document = new DummyDocument("test");
         when(documentOperations.readDocument(eq(uri), eq(DummyDocument.class))).thenReturn(document);
@@ -59,5 +60,23 @@ public class CouchDbUriToDocumentTransformerTest {
         Message<DummyDocument> transformedMessage = (Message<DummyDocument>) transformer.transform(message);
 
         assertThat(transformedMessage.getPayload(), equalTo(document));
+    }
+
+    @Test
+    public void transformStringMessage() throws Exception {
+        String uri = "http://test";
+        DummyDocument document = new DummyDocument("test");
+        when(documentOperations.readDocument(eq(new URI(uri)), eq(DummyDocument.class))).thenReturn(document);
+
+
+        Message<String> message = MessageBuilder.withPayload(uri).build();
+        Message<DummyDocument> transformedMessage = (Message<DummyDocument>) transformer.transform(message);
+
+        assertThat(transformedMessage.getPayload(), equalTo(document));
+    }
+
+    @Test(expected = MessageTransformationException.class)
+    public void transformUnkownIdType() throws Exception {
+        transformer.transform(MessageBuilder.withPayload('a').build());
     }
 }
