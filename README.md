@@ -21,6 +21,7 @@ to your project.
 - Spring Integration 2.0.1
 - Spring Web MVC 3.0.5
 - Jackson 1.7.1
+- Commons Logging 1.1.1
 
 ## Components
 The following are the main classes in the CouchDB support package. It is more convenient though to use
