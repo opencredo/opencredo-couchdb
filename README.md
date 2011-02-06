@@ -8,8 +8,14 @@ integrate your Spring Integration based applications with CouchDB databases.
 id or URI
 
 # Getting Started
-The module is available through the Maven central repositories. The following snippet adds the module
-to your project.
+
+## Getting CouchDB
+CouchDB is an Apache project. You can find instructions on how to to download, build and install CouchDB on the project's [web page](http://couchdb.apache.org/).
+Alternatively, you can download a desktop installer for your platform from [CouchOne](http://www.couchone.com/get). 
+
+## Maven 
+The module is available through Maven's central repository. The following snippet adds the module
+as a dependency to your project.
 
     <dependency>
         <groupId>org.opencredo.couchdb</groupId>
@@ -17,7 +23,7 @@ to your project.
         <version>0.5</version>
     </dependency>
 
-## Dependencies
+## Runtime Dependencies
 - Spring Integration 2.0.1
 - Spring Web MVC 3.0.5
 - Jackson 1.7.1
@@ -125,4 +131,4 @@ using its URI provided as the payload of the message under transformation.
 - Security
 
 # License
-This project is licensed under the Apache License, Version 2.0
+This project is licensed under the Apache License, Version 2.0.
