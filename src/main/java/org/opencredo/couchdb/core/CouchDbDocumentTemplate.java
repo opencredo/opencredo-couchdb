@@ -21,6 +21,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.Assert;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 
 import java.net.URI;
@@ -51,24 +52,40 @@ public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements Cou
         defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
     }
 
-    public <T> T readDocument(String id, Class<T> documentType) {
+    public <T> T readDocument(String id, Class<T> documentType) throws CouchDbOperationException {
         Assert.state(defaultDocumentUrl != null, "defaultDatabaseUrl must be set to use this method");
-        return restOperations.getForObject(defaultDocumentUrl, documentType, id);
+        try {
+            return restOperations.getForObject(defaultDocumentUrl, documentType, id);
+        } catch (RestClientException e) {
+            throw new CouchDbOperationException("Unable to communicate with CouchDB", e);
+        }
     }
 
-    public <T> T readDocument(URI uri, Class<T> documentType) {
-        return restOperations.getForObject(uri, documentType);
+    public <T> T readDocument(URI uri, Class<T> documentType) throws CouchDbOperationException {
+        try {
+            return restOperations.getForObject(uri, documentType);
+        } catch (RestClientException e) {
+            throw new CouchDbOperationException("Unable to communicate with CouchDB", e);
+        }
     }
 
-    public void writeDocument(String id, Object document) {
+    public void writeDocument(String id, Object document) throws CouchDbOperationException {
         Assert.state(defaultDocumentUrl != null, "defaultDatabaseUrl must be set to use this method");
         HttpEntity<?> httpEntity = createHttpEntity(document);
-        restOperations.put(defaultDocumentUrl, httpEntity, id);
+        try {
+            restOperations.put(defaultDocumentUrl, httpEntity, id);
+        } catch (RestClientException e) {
+            throw new CouchDbOperationException("Unable to communicate with CouchDB", e);
+        }
     }
 
-    public void writeDocument(URI uri, Object document) {
+    public void writeDocument(URI uri, Object document) throws CouchDbOperationException {
         HttpEntity<?> httpEntity = createHttpEntity(document);
-        restOperations.put(uri, httpEntity);
+        try {
+            restOperations.put(uri, httpEntity);
+        } catch (RestClientException e) {
+            throw new CouchDbOperationException("Unable to communicate with CouchDB", e);
+        }
     }
 
     /** Sets RestOperations */

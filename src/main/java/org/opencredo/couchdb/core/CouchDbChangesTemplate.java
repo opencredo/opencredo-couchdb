@@ -19,6 +19,7 @@ package org.opencredo.couchdb.core;
 import org.opencredo.couchdb.CouchDbUtils;
 import org.springframework.integration.MessagingException;
 import org.springframework.util.Assert;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 
 import java.net.URI;
@@ -62,9 +63,14 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
         databaseChangesUrl = CouchDbUtils.addChangesSince(defaultDatabaseUrl);
     }
 
-    public Collection<ChangedDocument> pollForChanges() {
-        Changes changes = restOperations.getForObject(databaseChangesUrl,
-                Changes.class, currentSequence);
+    public Collection<ChangedDocument> pollForChanges() throws CouchDbOperationException {
+        Changes changes = null;
+        try {
+            changes = restOperations.getForObject(databaseChangesUrl,
+                    Changes.class, currentSequence);
+        } catch (RestClientException e) {
+            throw new CouchDbOperationException("Unable to communicate with CouchDB", e);
+        }
 
         Long lastSequence = changes.getLast_seq();
         if (lastSequence > currentSequence) {
@@ -92,7 +98,7 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
                 ChangedDocument.Status status = determineStatus(change);
                 changedDocuments.add(new ChangedDocument(uri, status, change.getSeq()));
             } catch (URISyntaxException e) {
-                throw new MessagingException("unable to create URI for [" + change + "]", e);
+                throw new CouchDbOperationException("unable to create URI for [" + change + "]", e);
             }
         }
         return changedDocuments;

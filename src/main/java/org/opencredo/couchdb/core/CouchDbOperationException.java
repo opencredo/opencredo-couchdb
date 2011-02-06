@@ -16,19 +16,19 @@
 
 package org.opencredo.couchdb.core;
 
-import java.util.Collection;
-
 /**
- * CouchDB operations that polls for changes using the changes API.
- *
+ * An exception thrown when an error occurs while performing a CouchDB operation.
  * @author Tareq Abedrabbo
- * @since 24/01/2011
+ * @since 06/02/2011
  */
-public interface CouchDbChangesOperations {
+public class CouchDbOperationException extends RuntimeException {
 
     /**
-     * Polls the database for changes.
-     * @return the collection of changes or an empty collection if no changes are found
+     * Creates an instance of CouchDbOperationException.
+     * @param message an error message
+     * @param cause the cause of the exception
      */
-    Collection<ChangedDocument> pollForChanges() throws CouchDbOperationException;
+    public CouchDbOperationException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

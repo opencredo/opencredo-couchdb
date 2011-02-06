@@ -36,7 +36,7 @@ public interface CouchDbDocumentOperations {
      * @param documentType the target type to map to
      * @return the mapped object
      */
-    <T> T readDocument(String id, Class<T> documentType);
+    <T> T readDocument(String id, Class<T> documentType) throws CouchDbOperationException;
 
     /**
      * Reads a document from the database and maps it a Java object.
@@ -45,7 +45,7 @@ public interface CouchDbDocumentOperations {
      * @param documentType the target type to map to
      * @return the mapped object
      */
-    <T> T readDocument(URI uri, Class<T> documentType);
+    <T> T readDocument(URI uri, Class<T> documentType) throws CouchDbOperationException;
 
     /**
      * Maps a Java object to JSON and writes it to the database
@@ -56,7 +56,7 @@ public interface CouchDbDocumentOperations {
      * @param id       the id of the document to write
      * @param document the object to write
      */
-    void writeDocument(String id, Object document);
+    void writeDocument(String id, Object document) throws CouchDbOperationException;
 
     /**
      * Maps a Java object to JSON and writes it to the database
@@ -64,5 +64,5 @@ public interface CouchDbDocumentOperations {
      * @param uri      the full URI of the document to write
      * @param document the object to write
      */
-    void writeDocument(URI uri, Object document);
+    void writeDocument(URI uri, Object document) throws CouchDbOperationException;
 }
