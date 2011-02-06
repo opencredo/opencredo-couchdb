@@ -131,4 +131,4 @@ using its URI provided as the payload of the message under transformation.
 - Security
 
 # License
-This project is licensed under the Apache License, Version 2.0.
+This project is licensed under the [Apache License, Version 2.0](https://github.com/opencredo/opencredo-couchdb/blob/master/license.txt).
