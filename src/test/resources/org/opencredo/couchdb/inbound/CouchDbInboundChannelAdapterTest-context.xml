@@ -25,12 +25,12 @@
 
 
     <si:channel id="input">
-        <si:queue capacity="1"/>
+        <si:queue capacity="10"/>
     </si:channel>
 
     <si-couchdb:inbound-channel-adapter id="inboundChannelAdapter" auto-startup="false" channel="input"
             database-url="#{T(org.opencredo.couchdb.CouchDbIntegrationTest).TEST_DATABASE_URL}">
-        <si:poller fixed-rate="2000"/>
+        <si:poller fixed-rate="1000"/>
     </si-couchdb:inbound-channel-adapter>
 
     <bean class="org.springframework.integration.core.MessagingTemplate">

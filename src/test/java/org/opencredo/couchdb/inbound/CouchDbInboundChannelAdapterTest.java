@@ -50,20 +50,29 @@ public class CouchDbInboundChannelAdapterTest extends CouchDbIntegrationTest {
 
     @Autowired
     private MessagingTemplate messagingTemplate;
-
+    private static final int TEST_MESSAGES_NUMBER = 5;
 
     @Test
     public void receiveChanges() throws Exception {
 
+        createTestDocuments();
+        
         // start the poller here to avoid polling CouchDB before it's ready
         inboundChannelAdapter.start();
 
-        DummyDocument document = new DummyDocument("hello");
-        putDocument(document);
+        for (int i = 0; i < TEST_MESSAGES_NUMBER; i++) {
+            Message<Object> message = messagingTemplate.receive();
+            log.debug("received message " + message);
+            assertThat(message, notNullValue());
+            Object payload = message.getPayload();
+            assertThat(payload, instanceOf(URI.class));
+        }
+    }
 
-        Message<Object> message = messagingTemplate.receive();
-        assertThat(message, notNullValue());
-        Object payload = message.getPayload();
-        assertThat(payload, instanceOf(URI.class));
+    private void createTestDocuments() {
+        for (int i = 0; i < TEST_MESSAGES_NUMBER; i++) {
+            DummyDocument document = new DummyDocument("test message " + i);
+            putDocument(document);
+        }
     }
 }
