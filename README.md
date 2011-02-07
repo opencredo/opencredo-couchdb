@@ -20,7 +20,7 @@ as a dependency to your project.
     <dependency>
         <groupId>org.opencredo.couchdb</groupId>
         <artifactId>couchdb-si-support</artifactId>
-        <version>0.5</version>
+        <version>1.0</version>
     </dependency>
 
 ## Runtime Dependencies
