@@ -16,7 +16,7 @@
 
 package org.opencredo.couchdb.core;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * CouchDB operations that polls for changes using the changes API.
@@ -27,8 +27,8 @@ import java.util.Collection;
 public interface CouchDbChangesOperations {
 
     /**
-     * Polls the database for changes.
-     * @return the collection of changes or an empty collection if no changes are found
+     * Polls the database for latest changes.
+     * @return the list of changes or an empty list if no changes are found
      */
-    Collection<ChangedDocument> pollForChanges() throws CouchDbOperationException;
+    List<ChangedDocument> pollForChanges() throws CouchDbOperationException;
 }

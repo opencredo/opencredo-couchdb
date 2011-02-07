@@ -24,10 +24,9 @@ import org.springframework.integration.Message;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 import static org.hamcrest.Matchers.is;
@@ -66,17 +65,18 @@ public class CouchDbChangesPollingMessageSourceTest {
 
     @Test
     public void receiveOnEmptyPoll() throws Exception {
-        when(couchDbChangesOperations.pollForChanges()).thenReturn(Collections.<ChangedDocument>emptySet());
+        when(couchDbChangesOperations.pollForChanges()).thenReturn(Collections.<ChangedDocument>emptyList());
         Message<URI> message = messageSource.receive();
         assertThat(message, is(nullValue()));
     }
 
 
-    private Collection<ChangedDocument> createChangedDocuments(int n) throws URISyntaxException {
-        Set<ChangedDocument> documents = new HashSet<ChangedDocument>();
+    private List<ChangedDocument> createChangedDocuments(int n) throws URISyntaxException {
+        List<ChangedDocument> documents = new ArrayList<ChangedDocument>();
         String uri = "http://test/database/";
         for (int i = 0; i < n; i++) {
-            ChangedDocument doc = new ChangedDocument(new URI(uri + UUID.randomUUID()), ChangedDocument.Status.CREATED, new Long(i));
+            ChangedDocument doc = new ChangedDocument(new URI(uri + UUID.randomUUID()), ChangedDocument.Status.CREATED,
+                    new Long(i));
             documents.add(doc);
         }
         return documents;

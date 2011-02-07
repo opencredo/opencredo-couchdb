@@ -17,18 +17,15 @@
 package org.opencredo.couchdb.core;
 
 import org.opencredo.couchdb.CouchDbUtils;
-import org.springframework.integration.MessagingException;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * An implementation of CouchDbChangesOperations that relies on a RestOperations to communicate
@@ -63,7 +60,7 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
         databaseChangesUrl = CouchDbUtils.addChangesSince(defaultDatabaseUrl);
     }
 
-    public Collection<ChangedDocument> pollForChanges() throws CouchDbOperationException {
+    public List<ChangedDocument> pollForChanges() throws CouchDbOperationException {
         Changes changes = null;
         try {
             changes = restOperations.getForObject(databaseChangesUrl,
@@ -74,11 +71,11 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
 
         Long lastSequence = changes.getLast_seq();
         if (lastSequence > currentSequence) {
-            Collection<ChangedDocument> changedDocuments = prepareChanges(changes);
+            List<ChangedDocument> changedDocuments = prepareChanges(changes);
             currentSequence = lastSequence;
             return changedDocuments;
         } else {
-            return Collections.EMPTY_SET;
+            return Collections.EMPTY_LIST;
         }
     }
 
@@ -89,8 +86,8 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
         this.restOperations = restOperations;
     }
 
-    private Collection<ChangedDocument> prepareChanges(Changes changes) {
-        Set<ChangedDocument> changedDocuments = new HashSet<ChangedDocument>();
+    private List<ChangedDocument> prepareChanges(Changes changes) {
+        List<ChangedDocument> changedDocuments = new ArrayList<ChangedDocument>();
 
         for (Change change : changes.getResults()) {
             try {
