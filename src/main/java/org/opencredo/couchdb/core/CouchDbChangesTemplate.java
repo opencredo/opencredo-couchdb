@@ -61,12 +61,19 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
     }
 
     public List<ChangedDocument> pollForChanges() throws CouchDbOperationException {
+        if (logger.isDebugEnabled()) {
+            logger.debug("polling " + databaseUrl + " for changes from sequence " + currentSequence);
+        }
         Changes changes = null;
         try {
             changes = restOperations.getForObject(databaseChangesUrl,
                     Changes.class, currentSequence);
         } catch (RestClientException e) {
             throw new CouchDbOperationException("Unable to communicate with CouchDB", e);
+        }
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("found " + changes.getResults().size() + " changes");
         }
 
         Long lastSequence = changes.getLast_seq();
