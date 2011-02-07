@@ -25,7 +25,6 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.integration.transformer.MessageTransformationException;
 
 import java.net.URI;
-import java.util.UUID;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -37,16 +36,16 @@ import static org.mockito.Mockito.when;
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 01/02/2011
  */
-public class CouchDbUriToDocumentTransformerTest {
+public class CouchDbUrlToDocumentTransformerTest {
 
-    private CouchDbUriToDocumentTransfromer transformer;
+    private CouchDbUrlToDocumentTransformer transformer;
     private CouchDbDocumentOperations documentOperations;
 
 
     @Before
     public void setUp() throws Exception {
         documentOperations = mock(CouchDbDocumentOperations.class);
-        transformer = new CouchDbUriToDocumentTransfromer(DummyDocument.class, documentOperations);
+        transformer = new CouchDbUrlToDocumentTransformer(DummyDocument.class, documentOperations);
     }
 
     @Test

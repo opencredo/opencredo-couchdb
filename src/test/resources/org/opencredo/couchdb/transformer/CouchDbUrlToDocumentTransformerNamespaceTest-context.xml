@@ -25,7 +25,7 @@
 
     <si:channel id="input"/>
 
-    <si-couchdb:uri-to-document-transformer id="documentConverter"
+    <si-couchdb:url-to-document-transformer id="documentConverter"
                                            document-type="org.opencredo.couchdb.DummyDocument"
                                            input-channel="input"
                                            document-operations="documentOperations"/>

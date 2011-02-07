@@ -19,7 +19,6 @@ package org.opencredo.couchdb.transformer;
 import org.opencredo.couchdb.core.CouchDbDocumentOperations;
 import org.opencredo.couchdb.core.CouchDbDocumentTemplate;
 import org.springframework.integration.Message;
-import org.springframework.integration.MessageHandlingException;
 import org.springframework.integration.transformer.AbstractTransformer;
 import org.springframework.integration.transformer.MessageTransformationException;
 import org.springframework.util.Assert;
@@ -36,7 +35,7 @@ import java.net.URI;
  * @author Tareq Abedrabbo
  * @since 01/02/2011
  */
-public class CouchDbUriToDocumentTransfromer extends AbstractTransformer {
+public class CouchDbUrlToDocumentTransformer extends AbstractTransformer {
 
     private final CouchDbDocumentOperations couchDbDocumentOperations;
     private final Class<?> documentType;
@@ -47,7 +46,7 @@ public class CouchDbUriToDocumentTransfromer extends AbstractTransformer {
      * @param documentType              the target class to map documents to
      * @param couchDbDocumentOperations a custom CouchDbDocumentOperations
      */
-    public CouchDbUriToDocumentTransfromer(Class<?> documentType, CouchDbDocumentOperations couchDbDocumentOperations) {
+    public CouchDbUrlToDocumentTransformer(Class<?> documentType, CouchDbDocumentOperations couchDbDocumentOperations) {
         Assert.notNull(documentType, "documentType cannot be null");
         Assert.notNull(couchDbDocumentOperations, "couchDbDocumentOperations cannot be null");
         this.documentType = documentType;
@@ -60,7 +59,7 @@ public class CouchDbUriToDocumentTransfromer extends AbstractTransformer {
      *
      * @param documentType the target class to map documents to
      */
-    public CouchDbUriToDocumentTransfromer(Class<?> documentType) {
+    public CouchDbUrlToDocumentTransformer(Class<?> documentType) {
         this(documentType, new CouchDbDocumentTemplate());
     }
 

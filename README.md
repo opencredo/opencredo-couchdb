@@ -5,7 +5,7 @@ integrate your Spring Integration based applications with CouchDB databases.
 - Outbound channel adapter to write documents to a CouchDB database
 - Inbound channel adapter to read modified documents through CouchDB's changes API
 - Transformers that read CouchDB documents from the database and maps them to Java classes based on the document
-id or URI
+id or URL
 
 # Getting Started
 
@@ -39,16 +39,16 @@ the payload to JSON and send it to a CouchDB instance.
 
 ### CouchDbChangesPollingMessageSource
 This MessageSource uses a CouchDbChangesOperations to poll a CouchDB database for changes using the changes API.
-For every detected change, a new Message is created. The payload is a java.net.URI object representing the URI of the
-changed document. You can then transform this URI into a Java object by passing it through CouchDbUriToDocumentTransfromer.
+For every detected change, a new Message is created. The payload is a java.net.URI object representing the URL of the
+changed document. You can then transform this URL into a Java object by passing it through CouchDbUrlToDocumentTransformer.
 Note that this object is stateful since it internally queues detected changes till it gets polled.
 
 ### CouchDbIdToDocumentTransformer
 A transformer that reads a CouchDB document from the database based on the id of the document
 contained in the payload of the message.
 
-### CouchDbUriToDocumentTransfromer
-A transformer that reads a CouchDB document from the database based on the full URI of the document
+### CouchDbUrlToDocumentTransformer
+A transformer that reads a CouchDB document from the database based on the full URL of the document
 contained in the payload of the message.
 
 ### CouchDB Operations Support
@@ -91,7 +91,7 @@ but you can customise how the id is generated with a SpeL expression.
 
 ### Inbound Channel Adapter
 The inbound channel adapter polls CouchDB for changes through its changes API. For every changed document, a message
-containing its URI is set to the configured channel.
+containing its URL is set to the configured channel.
 
     <si:channel id="changedDocuments">
         <si:queue capacity="10"/>
@@ -114,13 +114,13 @@ from JSON to Java and therefore your class must be properly formed.
         document-type="org.opencredo.couchdb.DummyDocument"
         input-channel="input"/>
 
-### URI to Document Transformer
+### URL to Document Transformer
 This transformer is similar to the previous one but this time it reads and transforms a CouchDB document
-using its URI provided as the payload of the message under transformation.
+using its URL provided as the payload of the message under transformation.
 
     <si:channel id="input"/>
 
-    <si-couchdb:uri-to-document-transformer id="documentConverter"
+    <si-couchdb:url-to-document-transformer id="documentConverter"
         document-type="org.opencredo.couchdb.DummyDocument"
         input-channel="input"/>
 

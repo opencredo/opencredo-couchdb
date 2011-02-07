@@ -131,10 +131,10 @@
         </xsd:complexType>
     </xsd:element>
 
-    <xsd:element name="uri-to-document-transformer">
+    <xsd:element name="url-to-document-transformer">
         <xsd:complexType>
             <xsd:annotation>
-                <xsd:documentation>Configures a transformer that transforms a URI, received as
+                <xsd:documentation>Configures a transformer that transforms a url, received as
                     a Message payload, into a CouchDB document.
                 </xsd:documentation>
             </xsd:annotation>

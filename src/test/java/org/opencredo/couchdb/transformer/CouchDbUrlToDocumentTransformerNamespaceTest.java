@@ -41,7 +41,7 @@ import static org.mockito.Mockito.when;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration
-public class CouchDbUriToDocumentTransformerNamespaceTest {
+public class CouchDbUrlToDocumentTransformerNamespaceTest {
 
     @Autowired
     private CouchDbDocumentOperations documentOperations;

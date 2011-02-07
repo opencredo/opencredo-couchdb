@@ -16,7 +16,7 @@
 
 package org.opencredo.couchdb.config;
 
-import org.opencredo.couchdb.transformer.CouchDbUriToDocumentTransfromer;
+import org.opencredo.couchdb.transformer.CouchDbUrlToDocumentTransformer;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.integration.config.xml.AbstractTransformerParser;
@@ -31,10 +31,10 @@ import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DOC
  * @author Tareq Abedrabbo
  * @since 01/02/2011
  */
-public class CouchDbUriToDocumentTransformerParser extends AbstractTransformerParser {
+public class CouchDbUrlToDocumentTransformerParser extends AbstractTransformerParser {
     @Override
     protected String getTransformerClassName() {
-        return CouchDbUriToDocumentTransfromer.class.getName();
+        return CouchDbUrlToDocumentTransformer.class.getName();
     }
 
     @Override
