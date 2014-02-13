@@ -16,39 +16,36 @@
 
 package org.opencredo.couchdb.outbound;
 
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.opencredo.couchdb.CouchDbIntegrationTest;
 import org.opencredo.couchdb.DummyDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.Message;
-import org.springframework.integration.core.MessagingTemplate;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 /**
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
- * @since 17/01/2011
+ * @since 11/01/2011
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:org/opencredo/couchdb/outbound/CouchDbOutboundChannelAdapterTest-context.xml" })
-public class CouchDbOutboundChannelAdapterTest extends CouchDbIntegrationTest {
+@ContextConfiguration
+public class CouchDbSendingMessageHandlerTest extends CouchDbIntegrationTest {
 
     @Autowired
-    private MessagingTemplate messagingTemplate;
+    private CouchDbSendingMessageHandler messageHandler;
 
     @Test
-    public void sendMessage() {
-        DummyDocument document = new DummyDocument("klaatu berada nikto");
+    public void handleMessage() throws Exception {
+        DummyDocument document = new DummyDocument("Klaatu Berada Nikto");
         Message<DummyDocument> message = MessageBuilder.withPayload(document).build();
-        messagingTemplate.send(message);
-        DummyDocument response = getDocument("test_id", DummyDocument.class);
-        assertThat(response, equalTo(document));
+        messageHandler.handleMessage(message);
+
+        //assert message in the database
+        DummyDocument result = getDocument(message.getHeaders().getId().toString(), DummyDocument.class);
+        assertThat(document.getMessage(), equalTo(result.getMessage()));
+
     }
 }

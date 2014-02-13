@@ -19,9 +19,10 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+	<import resource="classpath:test-couchdb.xml"/>
 
     <bean class="org.opencredo.couchdb.outbound.CouchDbSendingMessageHandler">
-        <constructor-arg value="#{T(org.opencredo.couchdb.CouchDbIntegrationTest).TEST_DATABASE_URL}"/>
+        <constructor-arg name="databaseUrl" value="${couchdb.url}${couchdb.testDatabase}"/>
     </bean>
     
 </beans>

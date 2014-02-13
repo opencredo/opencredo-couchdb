@@ -21,18 +21,22 @@ import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
+import org.mockito.internal.util.ArrayUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.UUID;
 
 import static org.junit.Assume.assumeNoException;
@@ -47,42 +51,66 @@ import static org.springframework.http.HttpStatus.OK;
  * @since 13/01/2011
  */
 @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath:test-couchdb.xml" })
 public abstract class CouchDbIntegrationTest {
 
 
     protected static final Log log = LogFactory.getLog(CouchDbIntegrationTest.class);
 
-    public static final String COUCHDB_URL = "http://127.0.0.1:5984/";
-    public static final String TEST_DATABASE_URL = COUCHDB_URL + "si_couchdb_test/";
+    @Value("${couchdb.url}")
+    private String couchDbUrl;
+    
+    @Value("${couchdb.testDatabase}")
+    private String testDatabaseName;
+    
+    private String databaseUrl;
 
-    protected static final RestTemplate restTemplate = new RestTemplate();
+    protected static RestTemplate restTemplate;
+
+   private String [] credentials = {};
 
     /**
      * This methods ensures that the database is running. Otherwise, the test is ignored.
+    * @throws URISyntaxException 
      */
-    @BeforeClass
-    public static void assumeDatabaseIsUpAndRunning() {
-        try {
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity(COUCHDB_URL, String.class);
-            assumeTrue(responseEntity.getStatusCode().equals(OK));
-            log.debug("CouchDB is running on " + COUCHDB_URL +
-                    " with status " + responseEntity.getStatusCode());
-        } catch (RestClientException e) {
-            log.debug("CouchDB is not running on " + COUCHDB_URL);
-            assumeNoException(e);
-        }
+    private void assumeDatabaseIsUpAndRunning() throws URISyntaxException {
+       try {
+          if(restTemplate == null) {
+             synchronized (this) {
+                if(restTemplate == null) {
+                   credentials = CouchDbUtils.extractUsernamePassword(databaseUrl());
+                   if(credentials.length == 0)
+                      restTemplate = new BasicAuthRestTemplate();
+                   else
+                      restTemplate = new BasicAuthRestTemplate(credentials[0], credentials[1]);
+                }
+            }
+          }
+          ResponseEntity<String> responseEntity = restTemplate.getForEntity(couchDbUrl, String.class);
+          assumeTrue(responseEntity.getStatusCode().equals(OK));
+          log.debug("CouchDB is running on " + couchDbUrl +
+                  " with status " + responseEntity.getStatusCode());
+      } catch (RestClientException e) {
+          log.debug("CouchDB is not running on " + couchDbUrl);
+          assumeNoException(e);
+      }
     }
 
     @Before
     public void setUpTestDatabase() throws Exception {
-        RestTemplate template = new RestTemplate();
+        assumeDatabaseIsUpAndRunning();
+        RestTemplate template;
+        if(credentials.length > 0)
+           template = new BasicAuthRestTemplate(credentials[0], credentials[1]);
+        else
+           template = new BasicAuthRestTemplate();
         template.setErrorHandler(new DefaultResponseErrorHandler(){
             @Override
             public void handleError(ClientHttpResponse response) throws IOException {
                 // do nothing, error status will be handled in the switch statement
             }
         });
-        ResponseEntity<String> response = template.getForEntity(TEST_DATABASE_URL, String.class);
+        ResponseEntity<String> response = template.getForEntity(databaseUrl(), String.class);
         HttpStatus statusCode = response.getStatusCode();
         switch (statusCode) {
             case NOT_FOUND:
@@ -98,18 +126,18 @@ public abstract class CouchDbIntegrationTest {
     }
 
     private void deleteExisitingTestDatabase() {
-        restTemplate.delete(TEST_DATABASE_URL);
+        restTemplate.delete(databaseUrl());
     }
 
     private void createNewTestDatabase() {
-        restTemplate.put(TEST_DATABASE_URL, null);
+        restTemplate.put(databaseUrl(), null);
     }
 
     /**
      * Reads a CouchDB document and converts it to the expected type.
      */
     protected <T> T getDocument(String id, Class<T> expectedType) {
-        String url = TEST_DATABASE_URL + "{id}";
+        String url = databaseUrl() + "{id}";
         return restTemplate.getForObject(url, expectedType, id);
     }
 
@@ -121,7 +149,21 @@ public abstract class CouchDbIntegrationTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity request = new HttpEntity(document, headers);
         String id = UUID.randomUUID().toString();
-        restTemplate.put(TEST_DATABASE_URL + "{id}", request, id);
+        restTemplate.put(databaseUrl() + "{id}", request, id);
         return id;
+    }
+
+    public String databaseUrl() {
+        if (databaseUrl != null)
+            return databaseUrl;
+        StringBuilder b = new StringBuilder(couchDbUrl);
+        if (couchDbUrl.endsWith("/")) {
+            b.append(testDatabaseName);
+        } else {
+            b.append('/');
+            b.append(testDatabaseName);
+        }
+        databaseUrl = b.toString();
+        return databaseUrl;
     }
 }

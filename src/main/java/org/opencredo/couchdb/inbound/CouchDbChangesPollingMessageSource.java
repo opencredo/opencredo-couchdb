@@ -23,7 +23,6 @@ import org.springframework.integration.Message;
 import org.springframework.integration.context.IntegrationObjectSupport;
 import org.springframework.integration.core.MessageSource;
 import org.springframework.integration.support.MessageBuilder;
-import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.util.Collection;

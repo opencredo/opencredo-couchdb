@@ -16,6 +16,9 @@
 
 package org.opencredo.couchdb;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 /**
  * Utility class with operations to manipulate CouchDB URLS
  *
@@ -57,5 +60,26 @@ public class CouchDbUtils {
         }
         return url;
     }
+
+    /**
+     * Examines the given URL for a user info part (e.g. {@code http://user:password@hostname...}) and
+     * returns an array [ username, password ], if it finds credentials. Otherwise, an empty array is
+     * returned
+     * @param databaseUrl
+     * @return an empty or a 2 element String array
+    * @throws URISyntaxException 
+     */
+   public static String[] extractUsernamePassword(String databaseUrl) throws URISyntaxException {
+      URI uri = new URI(databaseUrl);
+      return extractUsernamePassword(uri);
+   }
+
+   public static String[] extractUsernamePassword(URI uri) {
+      final String [] empty = {};
+      String userinfo = uri.getUserInfo();
+      if(userinfo == null)
+         return empty;
+      return userinfo.split(":");
+   }
 
 }

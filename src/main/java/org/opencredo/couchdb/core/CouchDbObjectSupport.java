@@ -18,6 +18,7 @@ package org.opencredo.couchdb.core;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.opencredo.couchdb.BasicAuthRestTemplate;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
 import org.springframework.web.client.RestTemplate;
@@ -31,7 +32,15 @@ public abstract class CouchDbObjectSupport {
 
     protected final Log logger = LogFactory.getLog(this.getClass());
 
-    protected RestOperations restOperations = new RestTemplate();
+    protected RestOperations restOperations;
+
+    protected CouchDbObjectSupport() {
+       restOperations = new BasicAuthRestTemplate();
+    }
+
+    protected CouchDbObjectSupport(String username, String password) {
+       restOperations = new BasicAuthRestTemplate(username, password);
+    }
 
     public void setRestOperations(RestOperations restOperations) {
         Assert.notNull(restOperations, "restOperations cannot be null");

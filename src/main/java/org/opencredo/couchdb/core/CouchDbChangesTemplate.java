@@ -47,6 +47,7 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
      * The default constructor.
      */
     public CouchDbChangesTemplate() {
+       super();
     }
 
     /**
@@ -55,6 +56,18 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
      * @param defaultDatabaseUrl the default database to connect to
      */
     public CouchDbChangesTemplate(String defaultDatabaseUrl) {
+        Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
+        this.databaseUrl = defaultDatabaseUrl;
+        databaseChangesUrl = CouchDbUtils.addChangesSince(defaultDatabaseUrl);
+    }
+
+    /**
+     * Creates an instance of CouchDbChangesTemplate with a default database, user, and password for Basic Authentication
+     *
+     * @param defaultDatabaseUrl the default database to connect to
+     */
+    public CouchDbChangesTemplate(String defaultDatabaseUrl, String username, String password) {
+        super(username, password);
         Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
         this.databaseUrl = defaultDatabaseUrl;
         databaseChangesUrl = CouchDbUtils.addChangesSince(defaultDatabaseUrl);

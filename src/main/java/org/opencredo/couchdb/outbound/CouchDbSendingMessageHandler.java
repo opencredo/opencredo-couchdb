@@ -63,6 +63,12 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
         this(new CouchDbDocumentTemplate(databaseUrl));
     }
 
+    /**
+     * Creates a handler instance with a default database URL, user, and password for Basic Authentication
+     */
+    public CouchDbSendingMessageHandler(String databaseUrl, String username, String password) {
+        this(new CouchDbDocumentTemplate(databaseUrl, username, password));
+    }
 
     @Override
     protected void onInit() {

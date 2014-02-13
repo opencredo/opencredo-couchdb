@@ -41,6 +41,7 @@ public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements Cou
      * The default constructor.
      */
     public CouchDbDocumentTemplate() {
+       super();
     }
 
     /**
@@ -48,6 +49,18 @@ public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements Cou
      * @param defaultDatabaseUrl the default database to connect to
      */
     public CouchDbDocumentTemplate(String defaultDatabaseUrl) {
+        super();
+        Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
+        defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
+    }
+
+    /**
+     * Constructs an instance of CouchDbDocumentTemplate with a default database, user, and password for Basic Authentication
+     * 
+     * @param defaultDatabaseUrl the default database to connect to
+     */
+    public CouchDbDocumentTemplate(String defaultDatabaseUrl, String username, String password) {
+        super(username, password);
         Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
         defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
     }
