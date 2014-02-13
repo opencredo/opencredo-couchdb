@@ -20,14 +20,16 @@ as a dependency to your project.
     <dependency>
         <groupId>org.opencredo.couchdb</groupId>
         <artifactId>couchdb-si-support</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
     </dependency>
 
 ## Runtime Dependencies
-- Spring Integration 2.0.1
+
+- Spring Integration 2.2.6
 - Spring Web MVC 3.0.5
 - Jackson 1.7.1
 - Commons Logging 1.1.1
+- Commons Http Client 3.1
 
 ## Components
 The following are the main classes in the CouchDB support package. It is more convenient though to use
@@ -73,20 +75,20 @@ configuration file.
 		   http://www.opencredo.com/schema/couchdb/integration
 		   http://www.opencredo.com/schema/couchdb/integration/opencredo-integration-couchdb-1.0.xsd
 		   http://www.springframework.org/schema/integration
-		   http://www.springframework.org/schema/integration/spring-integration-2.0.xsd">
+		   http://www.springframework.org/schema/integration/spring-integration-2.2.xsd">
 
 ### Outbound Channel Adapter
 
     <si:channel id="input"/>
 
     <si-couchdb:outbound-channel-adapter id="couchdb" channel="input"
-        database-url="http://127.0.0.1:5984/si_couchdb_test/"/>
+        database-url="http://admin:secret@127.0.0.1:5984/si_couchdb_test/"/>
 
 By the default the id of the outgoing CouchDB document is the taken from the id of the Spring Integration message
 but you can customise how the id is generated with a SpeL expression.
 
     <si-couchdb:outbound-channel-adapter id="couchdb" channel="input"
-        database-url="http://127.0.0.1:5984/si_couchdb_test/"
+        database-url="http://admin:secret@127.0.0.1:5984/si_couchdb_test/"
         document-id-expression="T(java.util.UUID).randomUUID().toString()"/>
 
 ### Inbound Channel Adapter
@@ -98,7 +100,7 @@ containing its URL is set to the configured channel.
     </si:channel>
 
     <si-couchdb:inbound-channel-adapter channel="changedDocuments"
-        database-url="http://127.0.0.1:5984/si_couchdb_test/">
+        database-url="http://admin:secret@127.0.0.1:5984/si_couchdb_test/">
         <si:poller fixed-rate="60000"/>
     </si-couchdb:inbound-channel-adapter>
 
@@ -110,7 +112,7 @@ from JSON to Java and therefore your class must be properly formed.
     <si:channel id="input"/>
 
     <si-couchdb:id-to-document-transformer id="documentTransformer"
-        database-url="http://127.0.0.1:5984/si_couchdb_test/"
+        database-url="http://admin:secret@127.0.0.1:5984/si_couchdb_test/"
         document-type="org.opencredo.couchdb.DummyDocument"
         input-channel="input"/>
 
@@ -123,6 +125,32 @@ using its URL provided as the payload of the message under transformation.
     <si-couchdb:url-to-document-transformer id="documentConverter"
         document-type="org.opencredo.couchdb.DummyDocument"
         input-channel="input"/>
+
+### URL to Document Transformer
+This transformer is similar to the previous one but this time it reads and transforms a CouchDB document
+using its URL provided as the payload of the message under transformation.
+
+    <si:channel id="input"/>
+
+    <si-couchdb:url-to-document-transformer id="documentConverter"
+        document-type="org.opencredo.couchdb.DummyDocument"
+        input-channel="input"/>
+
+## Authentication
+
+As already exemplified in the URLs used above, it is possible to specify Basic Authentication credentials for the requests to
+CouchDB:
+
+    http://admin:secret@127.0.0.1:5984/si_couchdb_test/
+
+For a database without authorisation, you can of course use:
+
+    http://127.0.0.1:5984/si_couchdb_test/
+
+
+For an overview of the security features of CouchDB, see the [Security chapter of CouchDB, The Definitive Guide](http://guide.couchdb.org/draft/security.html).
+
+When securing a production database, you should use TLS/SSL. CouchDB supports https natively since release 1.1.0. For additional information see [How to enable SSL](http://wiki.apache.org/couchdb/How_to_enable_SSL).
 
 # Roadmap
 - Inbound channel adapter state store
