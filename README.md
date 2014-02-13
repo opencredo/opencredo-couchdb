@@ -152,6 +152,14 @@ For an overview of the security features of CouchDB, see the [Security chapter o
 
 When securing a production database, you should use TLS/SSL. CouchDB supports https natively since release 1.1.0. For additional information see [How to enable SSL](http://wiki.apache.org/couchdb/How_to_enable_SSL).
 
+## Build Time JUnit Tests
+
+The software has a good coverage with JUnit tests which run against a local, unsecured instance of CouchDB which listens on the default port `5984`.
+
+So, when building with maven, you should either have CouchDB running to avoid build failures or skip the tests altogether with `mvn -Dmaven.test.skip=true`.
+
+The configuration for the tests can be found in [test-couchdb.properties](src/test/resources/test-couchdb.properties).
+
 # Roadmap
 - Inbound channel adapter state store
 - Support updating existing documents
