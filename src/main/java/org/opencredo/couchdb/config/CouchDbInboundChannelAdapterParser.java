@@ -16,6 +16,7 @@
 
 package org.opencredo.couchdb.config;
 
+import org.opencredo.couchdb.inbound.CouchDbAllDocumentsMessageSource;
 import org.opencredo.couchdb.inbound.CouchDbChangesPollingMessageSource;
 import org.springframework.beans.BeanMetadataElement;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
@@ -26,6 +27,8 @@ import org.springframework.integration.config.xml.AbstractPollingInboundChannelA
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
+import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_ALL_DOCUMENTS_ATTRIBUTE;
+import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_ALL_DOCUMENTS_LIMIT_ATTRIBUTE;
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_CHANGES_OPERATIONS_ATTRIBUTE;
 import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DATABASE_URL_ATTRIBUTE;
 
@@ -37,11 +40,11 @@ import static org.opencredo.couchdb.config.CouchDbAdapterParserUtils.COUCHDB_DAT
 public class CouchDbInboundChannelAdapterParser extends AbstractPollingInboundChannelAdapterParser {
     @Override
     protected BeanMetadataElement parseSource(Element element, ParserContext parserContext) {
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.
-                genericBeanDefinition(CouchDbChangesPollingMessageSource.class);
-
+        BeanDefinitionBuilder builder = null;
         String databaseUrl = element.getAttribute(COUCHDB_DATABASE_URL_ATTRIBUTE);
         String changesOperations = element.getAttribute(COUCHDB_CHANGES_OPERATIONS_ATTRIBUTE);
+        String allDocuments = element.getAttribute(COUCHDB_ALL_DOCUMENTS_ATTRIBUTE);
+        String allDocumentsLimit = element.getAttribute(COUCHDB_ALL_DOCUMENTS_LIMIT_ATTRIBUTE);
 
         if (StringUtils.hasText(databaseUrl)) {
             if (StringUtils.hasText(changesOperations)) {
@@ -49,14 +52,31 @@ public class CouchDbInboundChannelAdapterParser extends AbstractPollingInboundCh
                         "At most one of '" + COUCHDB_DATABASE_URL_ATTRIBUTE + "' and '" +
                                 COUCHDB_CHANGES_OPERATIONS_ATTRIBUTE + "' may be provided.", element);
             } else {
+                if("true".equals(allDocuments)) {
+                    builder = BeanDefinitionBuilder.genericBeanDefinition(CouchDbAllDocumentsMessageSource.class);
+                } else {
+                    builder = BeanDefinitionBuilder.genericBeanDefinition(CouchDbChangesPollingMessageSource.class);
+                }
                 builder.addConstructorArgValue(databaseUrl);
             }
         } else if (StringUtils.hasText(changesOperations)) {
-            builder.addConstructorArgReference(changesOperations);
+            // changesOperations and allDocuments are XOR
+            if("true".equals(allDocuments)) {
+                parserContext.getReaderContext().error(
+                    "At most one of '" + COUCHDB_ALL_DOCUMENTS_ATTRIBUTE + "' and '" +
+                            COUCHDB_CHANGES_OPERATIONS_ATTRIBUTE + "' may be provided.", element);
+            } else {
+                builder = BeanDefinitionBuilder.genericBeanDefinition(CouchDbChangesPollingMessageSource.class);
+                builder.addConstructorArgReference(changesOperations);
+            }
         } else {
             parserContext.getReaderContext().error(
                     "Either '" + COUCHDB_DATABASE_URL_ATTRIBUTE + "' or '" +
                             COUCHDB_CHANGES_OPERATIONS_ATTRIBUTE + "' must be provided.", element);
+        }
+
+        if("true".equals(allDocuments)) {
+           builder.addConstructorArgValue(Integer.valueOf(allDocumentsLimit));
         }
 
         String beanName = BeanDefinitionReaderUtils.registerWithGeneratedName(

@@ -109,7 +109,7 @@ public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements Cou
     private HttpEntity<?> createHttpEntity(Object document) {
 
         if (document instanceof HttpEntity) {
-            HttpEntity httpEntity = (HttpEntity) document;
+            HttpEntity<?> httpEntity = (HttpEntity<?>) document;
             Assert.isTrue(httpEntity.getHeaders().getContentType().equals(MediaType.APPLICATION_JSON),
                     "HttpEntity payload with non application/json content type found.");
             return httpEntity;

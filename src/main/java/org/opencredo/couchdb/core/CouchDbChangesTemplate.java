@@ -73,6 +73,7 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
         databaseChangesUrl = CouchDbUtils.addChangesSince(defaultDatabaseUrl);
     }
 
+    @SuppressWarnings("unchecked")
     public List<ChangedDocument> pollForChanges() throws CouchDbOperationException {
         if (logger.isDebugEnabled()) {
             logger.debug("polling " + databaseUrl + " for changes from sequence " + currentSequence);

@@ -21,6 +21,7 @@ package org.opencredo.couchdb.core;
  * @author Tareq Abedrabbo
  * @since 06/02/2011
  */
+@SuppressWarnings("serial")
 public class CouchDbOperationException extends RuntimeException {
 
     /**

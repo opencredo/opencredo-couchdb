@@ -21,7 +21,6 @@ import org.apache.commons.logging.LogFactory;
 import org.opencredo.couchdb.BasicAuthRestTemplate;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * Base class for classes that need to communicate with CouchDB.
