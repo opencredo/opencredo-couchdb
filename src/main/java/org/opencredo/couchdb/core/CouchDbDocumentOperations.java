@@ -18,6 +18,8 @@ package org.opencredo.couchdb.core;
 
 import java.net.URI;
 
+import org.springframework.integration.MessageHeaders;
+
 /**
  * CouchDB operations that allow to read and write documents from and to the database.
  *
@@ -65,4 +67,25 @@ public interface CouchDbDocumentOperations {
      * @param document the object to write
      */
     void writeDocument(URI uri, Object document) throws CouchDbOperationException;
+
+    /**
+     * Maps a Java object to JSON and writes it to the database, replacing any
+     * template variables in the URL which have the same keys as message headers
+     * by their corresponding values taken from the <tt>headers</tt> argument.
+     *
+     * @param id       the id of the document to write
+     * @param document the object to write
+     */
+    void writeDocument(String id, Object payload, MessageHeaders headers);
+
+    /**
+     * Maps a Java object to JSON and writes it to the database, replacing any
+     * template variables in the URL which have the same keys as message headers
+     * by their corresponding values taken from the <tt>headers</tt> argument.
+     *
+     * @param uri      the full URI of the document to write, possibly containing template parts
+     * @param document the object to write
+     */
+    void writeDocument(URI uri, Object document, MessageHeaders headers) throws CouchDbOperationException;
+
 }

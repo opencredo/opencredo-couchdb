@@ -89,7 +89,7 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
         if (logger.isDebugEnabled()) {
             logger.debug("sending message to CouchDB [" + message + "]");
         }
-        couchDbDocumentOperations.writeDocument(documentId, message.getPayload());
+        couchDbDocumentOperations.writeDocument(documentId, message.getPayload(), message.getHeaders());
     }
 
     private String createDocumentId(Message<?> message) {

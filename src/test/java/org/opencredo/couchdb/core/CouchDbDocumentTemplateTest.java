@@ -19,13 +19,16 @@ package org.opencredo.couchdb.core;
 import org.junit.Before;
 import org.junit.Test;
 import org.opencredo.couchdb.DummyDocument;
+import org.springframework.integration.MessageHeaders;
 import org.springframework.web.client.RestOperations;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.mockito.Matchers.anyMap;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
@@ -59,12 +62,24 @@ public class CouchDbDocumentTemplateTest {
         verify(restOperations).put(anyString(), argThat(bodyEqual(document)), eq(id));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void writeDocumentToUri() throws Exception {
         DummyDocument document = new DummyDocument("hello");
         URI uri = new URI("http://test");
         documentTemplate.writeDocument(uri, document);
-        verify(restOperations).put(eq(uri), argThat(bodyEqual(document)));
+        verify(restOperations).put(eq(uri.toString()), argThat(bodyEqual(document)), anyMap());
+    }
+
+    @Test
+    public void writeDocumentToUriWithHeaders() throws Exception {
+        DummyDocument document = new DummyDocument("hello");
+        URI uri = new URI("http://test");
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("id", "specified_id");
+        MessageHeaders headers = new MessageHeaders(map);
+        documentTemplate.writeDocument(uri, document, headers);
+        verify(restOperations).put(eq(uri.toString()), argThat(bodyEqual(document)), eq(headers));
     }
 
     @Test

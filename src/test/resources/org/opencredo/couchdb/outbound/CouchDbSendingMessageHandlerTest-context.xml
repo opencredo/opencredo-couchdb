@@ -21,8 +21,12 @@
 
 	<import resource="classpath:test-couchdb.xml"/>
 
-    <bean class="org.opencredo.couchdb.outbound.CouchDbSendingMessageHandler">
+    <bean id="messageHandler" class="org.opencredo.couchdb.outbound.CouchDbSendingMessageHandler">
         <constructor-arg name="databaseUrl" value="${couchdb.url}${couchdb.testDatabase}"/>
+    </bean>
+    
+    <bean id="messageHandlerTemplateUrl" class="org.opencredo.couchdb.outbound.CouchDbSendingMessageHandler">
+        <constructor-arg name="databaseUrl" value="${couchdb.url}${couchdb.testDatabaseTemplate}"/>
     </bean>
     
 </beans>

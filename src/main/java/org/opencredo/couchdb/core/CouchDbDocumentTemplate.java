@@ -20,11 +20,14 @@ import org.opencredo.couchdb.CouchDbUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.integration.MessageHeaders;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 
 import java.net.URI;
+import java.util.HashMap;
 
 /**
  * An implementation of CouchDbDocumentOperations that relies on RestOperations to communicate
@@ -83,19 +86,34 @@ public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements Cou
     }
 
     public void writeDocument(String id, Object document) throws CouchDbOperationException {
+        writeDocument(id, document, null);
+    }
+    public void writeDocument(String id, Object document, MessageHeaders headers) throws CouchDbOperationException {
         Assert.state(defaultDocumentUrl != null, "defaultDatabaseUrl must be set to use this method");
         HttpEntity<?> httpEntity = createHttpEntity(document);
         try {
-            restOperations.put(defaultDocumentUrl, httpEntity, id);
+            if(headers != null) {
+                HashMap<String, Object> copiedHeaders = new HashMap<String, Object>(headers);
+                if(StringUtils.hasLength(id)) {
+                    copiedHeaders.put(MessageHeaders.ID, id);
+                }
+                restOperations.put(defaultDocumentUrl, httpEntity, copiedHeaders);
+            } else {
+                restOperations.put(defaultDocumentUrl, httpEntity, id);
+            }
         } catch (RestClientException e) {
             throw new CouchDbOperationException("Unable to communicate with CouchDB", e);
         }
     }
 
     public void writeDocument(URI uri, Object document) throws CouchDbOperationException {
+        writeDocument(uri, document, null);
+    }
+
+    public void writeDocument(URI uri, Object document, MessageHeaders headers) throws CouchDbOperationException {
         HttpEntity<?> httpEntity = createHttpEntity(document);
         try {
-            restOperations.put(uri, httpEntity);
+            restOperations.put(uri.toString(), httpEntity, headers);
         } catch (RestClientException e) {
             throw new CouchDbOperationException("Unable to communicate with CouchDB", e);
         }
