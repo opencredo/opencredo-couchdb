@@ -23,8 +23,9 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.node.ArrayNode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.opencredo.couchdb.core.CouchDbDocumentOperations;
 import org.opencredo.couchdb.core.CouchDbDocumentTemplate;
 import org.springframework.integration.Message;
@@ -90,13 +91,13 @@ public class CouchDbAllDocumentsMessageSource extends IntegrationObjectSupport i
    public Message<URI> receive() {
       if (toBeReceived.isEmpty()) {
          URI skipUri = UriComponentsBuilder.fromUri(databaseUri).replaceQueryParam("limit", limit).replaceQueryParam("skip", skip).build().toUri();
-         JsonNode response = couchDbDocumentOperations.readDocument(skipUri, JsonNode.class);
+         ObjectNode response = couchDbDocumentOperations.readDocument(skipUri, ObjectNode.class);
          ArrayNode rows = (ArrayNode) response.get("rows");
          int size = rows.size();
          Assert.isTrue(size <= limit, "Retrieved more rows than limit");
          for (int i = 0; i < size; i++) {
             JsonNode node = rows.get(i);
-            String id = node.get("id").getValueAsText();
+            String id = node.get("id").textValue();
             try {
                toBeReceived.add(new URI(baseUri + "/" + id));
                skip++;

@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 
 import java.net.URI;
 
-import org.codehaus.jackson.JsonNode;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -64,16 +64,16 @@ public class CouchDbAllDocumentsMessageSourceTest extends CouchDbIntegrationTest
    public void receiveSomeDocuments() throws Exception {
       inboundChannelAdapter.start();
       JsonNode row = receiveJson();
-      assertEquals("test message 0", row.get("message").getValueAsText());
+      assertEquals("test message 0", row.get("message").textValue());
       // messages 1, 10, 11, 12 are the next ones
       throwAwayMessages(4);
       // the next one should be 13
       row = receiveJson();
-      assertEquals("test message 13", row.get("message").getValueAsText());
+      assertEquals("test message 13", row.get("message").textValue());
       throwAwayMessages(13);
       // the alphabetically last message is 9
       row = receiveJson();
-      assertEquals("test message 9", row.get("message").getValueAsText());
+      assertEquals("test message 9", row.get("message").textValue());
       // the next one should be null
       row = receiveJson();
       assertNull(null);

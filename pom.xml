@@ -130,22 +130,27 @@
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-core</artifactId>
             <version>${springIntegrationVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${springVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.7.1</version>
-        </dependency>
-        <dependency>
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-webmvc</artifactId>
+	    <version>${springVersion}</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-core</artifactId>
+	    <version>2.2.2</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-databind</artifactId>
+	    <version>2.2.2</version>
+	</dependency>
+	<dependency>
 	    <groupId>commons-httpclient</groupId>
 	    <artifactId>commons-httpclient</artifactId>
 	    <version>3.1</version>
-        </dependency>
+	</dependency>
 
         <!-- Logging dependencies -->
         <dependency>
