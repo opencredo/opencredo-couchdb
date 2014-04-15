@@ -18,6 +18,7 @@ package org.opencredo.couchdb;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 
 /**
  * Utility class with operations to manipulate CouchDB URLS

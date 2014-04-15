@@ -23,14 +23,15 @@ import org.springframework.web.client.RestOperations;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * An implementation of CouchDbChangesOperations that relies on a RestOperations to communicate
- * with CouchDB.
- *
+ * An implementation of CouchDbChangesOperations that relies on a RestOperations to communicate with
+ * CouchDB.
+ * 
  * @author Tareq Abedrabbo
  * @author Tomas Lukosius
  * @since 24/01/2011
@@ -47,29 +48,61 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
      * The default constructor.
      */
     public CouchDbChangesTemplate() {
-       super();
+        super();
     }
 
     /**
      * Creates an instance of CouchDbChangesTemplate with a default database.
-     *
-     * @param defaultDatabaseUrl the default database to connect to
+     * 
+     * @param defaultDatabaseUrl
+     *            the default database to connect to
      */
     public CouchDbChangesTemplate(String defaultDatabaseUrl) {
-        Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
-        this.databaseUrl = defaultDatabaseUrl;
-        databaseChangesUrl = CouchDbUtils.addChangesSince(defaultDatabaseUrl);
+        this(defaultDatabaseUrl, 0L);
     }
 
     /**
-     * Creates an instance of CouchDbChangesTemplate with a default database, user, and password for Basic Authentication
-     *
-     * @param defaultDatabaseUrl the default database to connect to
+     * Creates an instance of CouchDbChangesTemplate with a default database which polls changes since the
+     * given <code>sinceSequenceId</code> (this is the value which is stored as local_seq with each
+     * document).
+     * 
+     * @param defaultDatabaseUrl
+     *            the default database to connect to
+     * @param sinceLocalSequence
+     *            the local sequence from which to poll for changes (cf. 'since' in
+     *            http://couchdb.readthedocs.org/en/latest/api/database/changes.html)
+     */
+    public CouchDbChangesTemplate(String defaultDatabaseUrl, long sinceLocalSequence) {
+        setUrlAndSequence(defaultDatabaseUrl, sinceLocalSequence);
+    }
+
+    /**
+     * Creates an instance of CouchDbChangesTemplate with a default database, user, and password for Basic
+     * Authentication
+     * 
+     * @param defaultDatabaseUrl
+     *            the default database to connect to
      */
     public CouchDbChangesTemplate(String defaultDatabaseUrl, String username, String password) {
+        this(defaultDatabaseUrl, username, password, 0L);
+    }
+
+    /**
+     * Creates an instance of CouchDbChangesTemplate with a default database, user, and password for Basic
+     * Authentication
+     * 
+     * @param defaultDatabaseUrl
+     *            the default database to connect to
+     */
+    public CouchDbChangesTemplate(String defaultDatabaseUrl, String username, String password, long sinceLocalSequence) {
         super(username, password);
+        setUrlAndSequence(defaultDatabaseUrl, sinceLocalSequence);
+    }
+
+    private void setUrlAndSequence(String defaultDatabaseUrl, long sinceLocalSequence) {
         Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
         this.databaseUrl = defaultDatabaseUrl;
+        this.currentSequence = sinceLocalSequence;
         databaseChangesUrl = CouchDbUtils.addChangesSince(defaultDatabaseUrl);
     }
 
@@ -80,8 +113,7 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
         }
         Changes changes = null;
         try {
-            changes = restOperations.getForObject(databaseChangesUrl,
-                    Changes.class, currentSequence);
+            changes = restOperations.getForObject(databaseChangesUrl, Changes.class, currentSequence);
         } catch (RestClientException e) {
             throw new CouchDbOperationException("Unable to communicate with CouchDB", e);
         }
@@ -112,10 +144,11 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
 
         for (Change change : changes.getResults()) {
             try {
-                URI uri = new URI(CouchDbUtils.ensureTrailingSlash(databaseUrl) + change.getId());
+                String encodedId = URLEncoder.encode(change.getId(), "UTF-8");
+                URI uri = new URI(CouchDbUtils.ensureTrailingSlash(databaseUrl) + encodedId);
                 ChangedDocument.Status status = determineStatus(change);
                 changedDocuments.add(new ChangedDocument(uri, status, change.getSeq()));
-            } catch (URISyntaxException e) {
+            } catch (Exception e) {
                 throw new CouchDbOperationException("unable to create URI for [" + change + "]", e);
             }
         }
@@ -154,10 +187,7 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
 
         @Override
         public String toString() {
-            return "Changes{" +
-                    "last_seq=" + last_seq +
-                    ", results=" + results +
-                    '}';
+            return "Changes{" + "last_seq=" + last_seq + ", results=" + results + '}';
         }
     }
 
@@ -201,11 +231,7 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
 
         @Override
         public String toString() {
-            return "Change{" +
-                    "changes=" + changes +
-                    ", seq=" + seq +
-                    ", id='" + id + '\'' +
-                    '}';
+            return "Change{" + "changes=" + changes + ", seq=" + seq + ", id='" + id + '\'' + '}';
         }
     }
 
@@ -222,11 +248,8 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
 
         @Override
         public String toString() {
-            return "Revision{" +
-                    "rev='" + rev + '\'' +
-                    '}';
+            return "Revision{" + "rev='" + rev + '\'' + '}';
         }
     }
-
 
 }
