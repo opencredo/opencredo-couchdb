@@ -54,7 +54,7 @@ public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements Cou
     public CouchDbDocumentTemplate(String defaultDatabaseUrl) {
         super();
         Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
-        defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
+        setDefaultDocumentUrl(defaultDatabaseUrl);
     }
 
     /**
@@ -65,7 +65,14 @@ public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements Cou
     public CouchDbDocumentTemplate(String defaultDatabaseUrl, String username, String password) {
         super(username, password);
         Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
-        defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
+        setDefaultDocumentUrl(defaultDatabaseUrl);
+    }
+
+    private void setDefaultDocumentUrl(String defaultDatabaseUrl) {
+        if(defaultDatabaseUrl.contains("{id}"))
+            defaultDocumentUrl = defaultDatabaseUrl;
+        else
+            defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
     }
 
     public <T> T readDocument(String id, Class<T> documentType) throws CouchDbOperationException {

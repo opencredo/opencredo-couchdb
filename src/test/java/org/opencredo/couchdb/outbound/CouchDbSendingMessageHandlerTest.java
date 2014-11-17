@@ -66,7 +66,7 @@ public class CouchDbSendingMessageHandlerTest extends CouchDbIntegrationTest {
         messageHandlerTemplateUrl.handleMessage(message);
 
         //assert message in the database
-        DummyDocument result = getDocument(message.getHeaders().getId().toString(), DummyDocument.class);
+        DummyDocument result = getDocument("couchdb-" + message.getHeaders().getId().toString(), DummyDocument.class);
         assertThat(document.getMessage(), equalTo(result.getMessage()));
 
     }

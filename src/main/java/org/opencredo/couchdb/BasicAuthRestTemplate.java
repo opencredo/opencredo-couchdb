@@ -5,6 +5,7 @@ import java.net.URI;
 
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.springframework.http.HttpMethod;
@@ -29,12 +30,15 @@ public class BasicAuthRestTemplate extends RestTemplate {
    public BasicAuthRestTemplate() {
         super();
         httpClient = new HttpClient();
+        MultiThreadedHttpConnectionManager conMan = new MultiThreadedHttpConnectionManager();
+        conMan.setMaxTotalConnections(50);
+        conMan.setMaxConnectionsPerHost(50);
+        httpClient.setHttpConnectionManager(conMan);
         setRequestFactory(new CommonsClientHttpRequestFactory(httpClient));
    }
 
    public BasicAuthRestTemplate(String username, String password) {
-      super();
-      httpClient = new HttpClient();
+      this();
       setCredentials(httpClient, username, password);
       setRequestFactory(new CommonsClientHttpRequestFactory(httpClient));
    }
@@ -51,7 +55,7 @@ public class BasicAuthRestTemplate extends RestTemplate {
     * @param url
     *           the URL to connect to
     * @param method
-    *           the HTTP method to exectute (GET, POST, etc.)
+    *           the HTTP method to execute (GET, POST, etc.)
     * @return the created request
     * @throws IOException
     *            in case of I/O errors
