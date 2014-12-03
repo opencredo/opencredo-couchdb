@@ -54,7 +54,7 @@ public class CouchDbUrlToDocumentTransformerNamespaceTest {
         URI uri = new URI("http://test");
         DummyDocument document = new DummyDocument("test");
         when(documentOperations.readDocument(eq(uri), eq(DummyDocument.class))).thenReturn(document);
-        Object response = messagingTemplate.convertSendAndReceive(uri);
+        Object response = messagingTemplate.convertSendAndReceive(uri, DummyDocument.class);
         assertThat(response, instanceOf(DummyDocument.class));
         DummyDocument responseDocument = (DummyDocument) response;
         assertThat(responseDocument, equalTo(document));

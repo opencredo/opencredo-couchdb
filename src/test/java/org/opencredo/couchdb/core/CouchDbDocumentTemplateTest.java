@@ -19,7 +19,7 @@ package org.opencredo.couchdb.core;
 import org.junit.Before;
 import org.junit.Test;
 import org.opencredo.couchdb.DummyDocument;
-import org.springframework.integration.MessageHeaders;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.web.client.RestOperations;
 
 import java.net.URI;

@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.opencredo.couchdb.core.CouchDbDocumentOperations;
 import org.opencredo.couchdb.core.CouchDbDocumentTemplate;
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 import org.springframework.integration.context.IntegrationObjectSupport;
 import org.springframework.integration.core.MessageSource;
 import org.springframework.integration.support.MessageBuilder;

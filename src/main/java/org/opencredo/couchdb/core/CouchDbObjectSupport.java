@@ -16,6 +16,9 @@
 
 package org.opencredo.couchdb.core;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.opencredo.couchdb.BasicAuthRestTemplate;
@@ -34,11 +37,15 @@ public abstract class CouchDbObjectSupport {
     protected RestOperations restOperations;
 
     protected CouchDbObjectSupport() {
-       restOperations = new BasicAuthRestTemplate();
+       restOperations = new BasicAuthRestTemplate(100);
     }
 
-    protected CouchDbObjectSupport(String username, String password) {
-       restOperations = new BasicAuthRestTemplate(username, password);
+    protected CouchDbObjectSupport(String username, String password, String url) {
+       restOperations = new BasicAuthRestTemplate(username, password, url, 100);
+    }
+
+    public CouchDbObjectSupport(String defaultDatabaseUrl) {
+        restOperations = new BasicAuthRestTemplate(defaultDatabaseUrl);
     }
 
     public void setRestOperations(RestOperations restOperations) {

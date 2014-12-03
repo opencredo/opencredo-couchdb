@@ -22,7 +22,7 @@ import org.opencredo.couchdb.CouchDbIntegrationTest;
 import org.opencredo.couchdb.DummyDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 import org.springframework.integration.core.MessagingTemplate;
 import org.springframework.integration.endpoint.AbstractEndpoint;
 import org.springframework.test.context.ContextConfiguration;
@@ -60,7 +60,7 @@ public class CouchDbInboundChannelAdapterTest extends CouchDbIntegrationTest {
         inboundChannelAdapter.start();
 
         for (int i = 0; i < TEST_MESSAGES_NUMBER; i++) {
-            Message<Object> message = messagingTemplate.receive();
+            Message<Object> message = (Message<Object>) messagingTemplate.receive();
             log.debug("received message " + message);
             assertThat(message, notNullValue());
             Object payload = message.getPayload();

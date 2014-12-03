@@ -100,7 +100,7 @@ public abstract class CouchDbIntegrationTest {
                         if (credentials.length == 0)
                             restTemplate = new BasicAuthRestTemplate();
                         else
-                            restTemplate = new BasicAuthRestTemplate(credentials[0], credentials[1]);
+                            restTemplate = new BasicAuthRestTemplate(credentials[0], credentials[1], databaseUrl());
                     }
                 }
             }
@@ -118,7 +118,7 @@ public abstract class CouchDbIntegrationTest {
         assumeDatabaseIsUpAndRunning();
         RestTemplate template;
         if (credentials.length > 0)
-            template = new BasicAuthRestTemplate(credentials[0], credentials[1]);
+            template = new BasicAuthRestTemplate(credentials[0], credentials[1], databaseUrl());
         else
             template = new BasicAuthRestTemplate();
         template.setErrorHandler(new DefaultResponseErrorHandler() {

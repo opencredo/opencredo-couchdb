@@ -7,9 +7,9 @@
        xmlns:si-couchdb="http://www.opencredo.com/schema/couchdb/integration"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
-						http://www.opencredo.com/schema/couchdb/integration http://www.opencredo.com/schema/couchdb/integration/opencredo-integration-couchdb-1.0.xsd
-						http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.2.xsd
-						http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http-2.2.xsd">
+						http://www.opencredo.com/schema/couchdb/integration http://www.opencredo.com/schema/couchdb/integration/opencredo-integration-couchdb.xsd
+						http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+						http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd">
 
 
 	<import resource="classpath:test-couchdb.xml"/>

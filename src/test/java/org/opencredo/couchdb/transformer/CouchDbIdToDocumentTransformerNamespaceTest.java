@@ -51,7 +51,7 @@ public class CouchDbIdToDocumentTransformerNamespaceTest {
         String id = "id";
         DummyDocument document = new DummyDocument("test");
         when(documentOperations.readDocument(eq(id), eq(DummyDocument.class))).thenReturn(document);
-        Object response = messagingTemplate.convertSendAndReceive(id);
+        Object response = messagingTemplate.convertSendAndReceive(id, DummyDocument.class);
         assertThat(response, instanceOf(DummyDocument.class));
         DummyDocument responseDocument = (DummyDocument) response;
         assertThat(responseDocument, equalTo(document));

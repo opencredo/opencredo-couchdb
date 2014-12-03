@@ -20,7 +20,7 @@ import org.opencredo.couchdb.CouchDbUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.integration.MessageHeaders;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
@@ -52,7 +52,7 @@ public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements Cou
      * @param defaultDatabaseUrl the default database to connect to
      */
     public CouchDbDocumentTemplate(String defaultDatabaseUrl) {
-        super();
+        super(defaultDatabaseUrl);
         Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
         setDefaultDocumentUrl(defaultDatabaseUrl);
     }
@@ -63,7 +63,7 @@ public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements Cou
      * @param defaultDatabaseUrl the default database to connect to
      */
     public CouchDbDocumentTemplate(String defaultDatabaseUrl, String username, String password) {
-        super(username, password);
+        super(username, password, defaultDatabaseUrl);
         Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
         setDefaultDocumentUrl(defaultDatabaseUrl);
     }

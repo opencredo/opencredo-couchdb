@@ -18,7 +18,7 @@ package org.opencredo.couchdb.core;
 
 import java.net.URI;
 
-import org.springframework.integration.MessageHeaders;
+import org.springframework.messaging.MessageHeaders;
 
 /**
  * CouchDB operations that allow to read and write documents from and to the database.

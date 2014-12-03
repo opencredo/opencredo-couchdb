@@ -95,7 +95,7 @@ public class CouchDbChangesTemplate extends CouchDbObjectSupport implements Couc
      *            the default database to connect to
      */
     public CouchDbChangesTemplate(String defaultDatabaseUrl, String username, String password, long sinceLocalSequence) {
-        super(username, password);
+        super(username, password, defaultDatabaseUrl);
         setUrlAndSequence(defaultDatabaseUrl, sinceLocalSequence);
     }
 

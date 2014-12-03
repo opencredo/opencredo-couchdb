@@ -21,7 +21,7 @@ import org.junit.runner.RunWith;
 import org.opencredo.couchdb.CouchDbIntegrationTest;
 import org.opencredo.couchdb.DummyDocument;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 import org.springframework.integration.core.MessagingTemplate;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.test.annotation.DirtiesContext;
@@ -55,7 +55,7 @@ public class CouchDbOutboundChannelAdapterPollerTest extends CouchDbIntegrationT
         Message<DummyDocument> message = MessageBuilder.withPayload(document).build();
         messagingTemplate.send(message);
 
-        DummyDocument response = (DummyDocument) messagingTemplate.convertSendAndReceive("testRequestChannel", message.getHeaders().getId());
+        DummyDocument response = (DummyDocument) messagingTemplate.convertSendAndReceive("testRequestChannel", message.getHeaders().getId(), DummyDocument.class);
         assertThat(document.getMessage(), equalTo(response.getMessage()));
     }
 }

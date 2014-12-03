@@ -18,7 +18,7 @@ package org.opencredo.couchdb.transformer;
 
 import org.opencredo.couchdb.core.CouchDbDocumentOperations;
 import org.opencredo.couchdb.core.CouchDbDocumentTemplate;
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 import org.springframework.integration.transformer.AbstractTransformer;
 import org.springframework.integration.transformer.MessageTransformationException;
 import org.springframework.util.Assert;

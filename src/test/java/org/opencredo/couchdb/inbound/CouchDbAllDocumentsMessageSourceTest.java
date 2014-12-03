@@ -28,7 +28,7 @@ import org.opencredo.couchdb.CouchDbIntegrationTest;
 import org.opencredo.couchdb.DummyDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 import org.springframework.integration.core.MessagingTemplate;
 import org.springframework.integration.endpoint.AbstractEndpoint;
 import org.springframework.test.context.ContextConfiguration;
@@ -86,7 +86,7 @@ public class CouchDbAllDocumentsMessageSourceTest extends CouchDbIntegrationTest
    }
 
    private JsonNode receiveJson() {
-      Message<URI> msg = messagingTemplate.receive();
+      Message<URI> msg = (Message<URI>) messagingTemplate.receive();
       if(msg == null)
          return null;
       msg.getPayload();
