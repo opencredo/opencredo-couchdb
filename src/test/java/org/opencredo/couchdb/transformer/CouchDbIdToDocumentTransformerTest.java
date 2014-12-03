@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.opencredo.couchdb.DummyDocument;
 import org.opencredo.couchdb.core.CouchDbDocumentOperations;
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.integration.transformer.MessageTransformationException;
 

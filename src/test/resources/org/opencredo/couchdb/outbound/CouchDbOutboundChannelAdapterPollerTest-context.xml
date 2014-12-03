@@ -7,20 +7,20 @@
        xmlns:si-couchdb="http://www.opencredo.com/schema/couchdb/integration"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
-						http://www.opencredo.com/schema/couchdb/integration http://www.opencredo.com/schema/couchdb/integration/opencredo-integration-couchdb-1.0.xsd
-						http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.0.xsd
-						http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http-2.0.xsd">
+						http://www.opencredo.com/schema/couchdb/integration http://www.opencredo.com/schema/couchdb/integration/opencredo-integration-couchdb.xsd
+						http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+						http://www.springframework.org/schema/integration/http http://www.springframework.org/schema/integration/http/spring-integration-http.xsd">
 
+
+	<import resource="classpath:test-couchdb.xml"/>
 
     <si:channel id="input">
         <si:queue capacity="1"/>
     </si:channel>
 
     <si-couchdb:outbound-channel-adapter id="couchdb" channel="input"
-                                         database-url="#{T(org.opencredo.couchdb.CouchDbIntegrationTest).TEST_DATABASE_URL}">
-        <si:poller>
-            <si:interval-trigger interval="1000"/>
-        </si:poller>
+                                         database-url="${couchdb.url}/${couchdb.testDatabase}">
+        <si:poller fixed-rate="1000"/>
     </si-couchdb:outbound-channel-adapter>
 
     <bean class="org.springframework.integration.core.MessagingTemplate">
@@ -29,7 +29,7 @@
 
     <si:channel id="testRequestChannel"/>
 
-    <si-http:outbound-gateway url="#{T(org.opencredo.couchdb.CouchDbIntegrationTest).TEST_DATABASE_URL + '{id}'}"
+    <si-http:outbound-gateway url="${couchdb.url}${couchdb.testDatabase}{id}"
                               http-method="GET"
                               request-channel="testRequestChannel"
                               expected-response-type="org.opencredo.couchdb.DummyDocument">

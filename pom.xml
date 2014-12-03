@@ -3,18 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.opencredo.couchdb</groupId>
     <artifactId>couchdb-si-support</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>0.1.kd4-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>opencredo-couchdb</name>
     <description>OpenCredo CouchDB Spring Integration Support</description>
     <url>http://www.opencredo.org</url>
-
-    <parent>
-        <groupId>org.opencredo</groupId>
-        <artifactId>opencredo-master-pom</artifactId>
-        <version>1.0</version>
-    </parent>
-
 
     <licenses>
         <license>
@@ -64,12 +57,40 @@
 
     <properties>
         <log4jVersion>1.2.16</log4jVersion>
-        <springIntegrationVersion>2.0.1.RELEASE</springIntegrationVersion>
-        <springVersion>3.0.5.RELEASE</springVersion>
+        <springIntegrationVersion>4.1.0.RELEASE</springIntegrationVersion>
+        <springVersion>4.1.2.RELEASE</springVersion>
+        <coberturaPluginVersion>2.3</coberturaPluginVersion>
     </properties>
+
+    <reporting>
+	<plugins>
+	    <plugin>
+		<groupId>org.codehaus.mojo</groupId>
+		<artifactId>cobertura-maven-plugin</artifactId>
+		<version>${coberturaPluginVersion}</version>
+		<inherited>true</inherited>
+                <configuration>
+                    <formats>
+                        <format>html</format>
+                        <format>xml</format>
+                    </formats>
+                </configuration>
+	    </plugin>
+        </plugins>
+    </reporting>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <inherited>true</inherited>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <inherited>false</inherited>
@@ -86,7 +107,7 @@
                                     <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                                 </manifest>
                                 <manifestEntries>
-                                    <CouchDB-SI-Support-Version>${pom.version}</CouchDB-SI-Support-Version>
+                                    <CouchDB-SI-Support-Version>${project.version}</CouchDB-SI-Support-Version>
                                 </manifestEntries>
                             </archive>
                             <descriptors>
@@ -96,10 +117,10 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.4</version>
+	    <plugin>
+		<groupId>org.codehaus.mojo</groupId>
+		<artifactId>cobertura-maven-plugin</artifactId>
+		<version>${coberturaPluginVersion}</version>
             </plugin>
         </plugins>
     </build>
@@ -109,18 +130,33 @@
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-core</artifactId>
             <version>${springIntegrationVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>${springVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.7.1</version>
-        </dependency>
-
+	</dependency>
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-webmvc</artifactId>
+	    <version>${springVersion}</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-core</artifactId>
+	    <version>2.4.2</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.fasterxml.jackson.core</groupId>
+	    <artifactId>jackson-databind</artifactId>
+	    <version>2.4.2</version>
+	</dependency>
+	<dependency>
+    	<groupId>org.apache.httpcomponents</groupId>
+  		<artifactId>httpclient</artifactId>
+    	<version>4.3.4</version>
+    </dependency>
+	<dependency>
+		<groupId>commons-codec</groupId>
+		<artifactId>commons-codec</artifactId>
+		<version>1.6</version>
+		<scope>test</scope>
+	</dependency>
 
         <!-- Logging dependencies -->
         <dependency>
@@ -153,7 +189,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.2</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
         <dependency>

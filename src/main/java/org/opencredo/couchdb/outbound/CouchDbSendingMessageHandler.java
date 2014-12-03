@@ -26,7 +26,7 @@ import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.expression.spel.support.StandardTypeConverter;
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 import org.springframework.integration.handler.AbstractMessageHandler;
 import org.springframework.util.Assert;
 
@@ -63,6 +63,12 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
         this(new CouchDbDocumentTemplate(databaseUrl));
     }
 
+    /**
+     * Creates a handler instance with a default database URL, user, and password for Basic Authentication
+     */
+    public CouchDbSendingMessageHandler(String databaseUrl, String username, String password) {
+        this(new CouchDbDocumentTemplate(databaseUrl, username, password));
+    }
 
     @Override
     protected void onInit() {
@@ -83,7 +89,7 @@ public class CouchDbSendingMessageHandler extends AbstractMessageHandler {
         if (logger.isDebugEnabled()) {
             logger.debug("sending message to CouchDB [" + message + "]");
         }
-        couchDbDocumentOperations.writeDocument(documentId, message.getPayload());
+        couchDbDocumentOperations.writeDocument(documentId, message.getPayload(), message.getHeaders());
     }
 
     private String createDocumentId(Message<?> message) {

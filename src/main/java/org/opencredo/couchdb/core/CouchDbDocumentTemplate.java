@@ -20,11 +20,14 @@ import org.opencredo.couchdb.CouchDbUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.MessageHeaders;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestOperations;
 
 import java.net.URI;
+import java.util.HashMap;
 
 /**
  * An implementation of CouchDbDocumentOperations that relies on RestOperations to communicate
@@ -41,6 +44,7 @@ public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements Cou
      * The default constructor.
      */
     public CouchDbDocumentTemplate() {
+       super();
     }
 
     /**
@@ -48,8 +52,27 @@ public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements Cou
      * @param defaultDatabaseUrl the default database to connect to
      */
     public CouchDbDocumentTemplate(String defaultDatabaseUrl) {
+        super(defaultDatabaseUrl);
         Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
-        defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
+        setDefaultDocumentUrl(defaultDatabaseUrl);
+    }
+
+    /**
+     * Constructs an instance of CouchDbDocumentTemplate with a default database, user, and password for Basic Authentication
+     * 
+     * @param defaultDatabaseUrl the default database to connect to
+     */
+    public CouchDbDocumentTemplate(String defaultDatabaseUrl, String username, String password) {
+        super(username, password, defaultDatabaseUrl);
+        Assert.hasText(defaultDatabaseUrl, "defaultDatabaseUrl must not be empty");
+        setDefaultDocumentUrl(defaultDatabaseUrl);
+    }
+
+    private void setDefaultDocumentUrl(String defaultDatabaseUrl) {
+        if(defaultDatabaseUrl.contains("{id}"))
+            defaultDocumentUrl = defaultDatabaseUrl;
+        else
+            defaultDocumentUrl = CouchDbUtils.addId(defaultDatabaseUrl);
     }
 
     public <T> T readDocument(String id, Class<T> documentType) throws CouchDbOperationException {
@@ -70,19 +93,34 @@ public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements Cou
     }
 
     public void writeDocument(String id, Object document) throws CouchDbOperationException {
+        writeDocument(id, document, null);
+    }
+    public void writeDocument(String id, Object document, MessageHeaders headers) throws CouchDbOperationException {
         Assert.state(defaultDocumentUrl != null, "defaultDatabaseUrl must be set to use this method");
         HttpEntity<?> httpEntity = createHttpEntity(document);
         try {
-            restOperations.put(defaultDocumentUrl, httpEntity, id);
+            if(headers != null) {
+                HashMap<String, Object> copiedHeaders = new HashMap<String, Object>(headers);
+                if(StringUtils.hasLength(id)) {
+                    copiedHeaders.put(MessageHeaders.ID, id);
+                }
+                restOperations.put(defaultDocumentUrl, httpEntity, copiedHeaders);
+            } else {
+                restOperations.put(defaultDocumentUrl, httpEntity, id);
+            }
         } catch (RestClientException e) {
             throw new CouchDbOperationException("Unable to communicate with CouchDB", e);
         }
     }
 
     public void writeDocument(URI uri, Object document) throws CouchDbOperationException {
+        writeDocument(uri, document, null);
+    }
+
+    public void writeDocument(URI uri, Object document, MessageHeaders headers) throws CouchDbOperationException {
         HttpEntity<?> httpEntity = createHttpEntity(document);
         try {
-            restOperations.put(uri, httpEntity);
+            restOperations.put(uri.toString(), httpEntity, headers);
         } catch (RestClientException e) {
             throw new CouchDbOperationException("Unable to communicate with CouchDB", e);
         }
@@ -96,7 +134,7 @@ public class CouchDbDocumentTemplate extends CouchDbObjectSupport implements Cou
     private HttpEntity<?> createHttpEntity(Object document) {
 
         if (document instanceof HttpEntity) {
-            HttpEntity httpEntity = (HttpEntity) document;
+            HttpEntity<?> httpEntity = (HttpEntity<?>) document;
             Assert.isTrue(httpEntity.getHeaders().getContentType().equals(MediaType.APPLICATION_JSON),
                     "HttpEntity payload with non application/json content type found.");
             return httpEntity;

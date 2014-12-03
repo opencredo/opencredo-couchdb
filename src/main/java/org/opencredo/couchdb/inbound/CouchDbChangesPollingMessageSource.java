@@ -19,11 +19,10 @@ package org.opencredo.couchdb.inbound;
 import org.opencredo.couchdb.core.ChangedDocument;
 import org.opencredo.couchdb.core.CouchDbChangesOperations;
 import org.opencredo.couchdb.core.CouchDbChangesTemplate;
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 import org.springframework.integration.context.IntegrationObjectSupport;
 import org.springframework.integration.core.MessageSource;
 import org.springframework.integration.support.MessageBuilder;
-import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.util.Collection;

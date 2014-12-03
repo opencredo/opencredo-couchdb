@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.opencredo.couchdb.core.ChangedDocument;
 import org.opencredo.couchdb.core.CouchDbChangesOperations;
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 
 import java.net.URI;
 import java.net.URISyntaxException;

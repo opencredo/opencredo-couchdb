@@ -30,6 +30,8 @@ public class CouchDbAdapterParserUtils {
     static final String COUCHDB_DOCUMENT_TYPE_ATTRIBUTE = "document-type";
     static final String COUCHDB_DOCUMENT_OPERATIONS_ATTRIBUTE = "document-operations";
     static final String COUCHDB_CHANGES_OPERATIONS_ATTRIBUTE = "changes-operations";
+    static final String COUCHDB_ALL_DOCUMENTS_ATTRIBUTE = "all-documents";
+    static final String COUCHDB_ALL_DOCUMENTS_LIMIT_ATTRIBUTE = "all-documents-limit";
 
     static final String COUCHDB_DOCUMENT_ID_EXPRESSION_PROPERTY = "documentIdExpression";
 

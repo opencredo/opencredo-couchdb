@@ -20,25 +20,23 @@
        xmlns:si="http://www.springframework.org/schema/integration"
        xmlns:si-couchdb="http://www.opencredo.com/schema/couchdb/integration"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-    					http://www.opencredo.com/schema/couchdb/integration http://www.opencredo.com/schema/couchdb/integration/opencredo-integration-couchdb.xsd
-	    			    http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
-
-	<import resource="classpath:test-couchdb.xml"/>
-
-    <si:channel id="input"/>
-
-    <si-couchdb:id-to-document-transformer id="documentConverter"
-                                           document-type="org.opencredo.couchdb.DummyDocument"
-                                           input-channel="input"
-                                           document-operations="documentOperations"/>
+						http://www.opencredo.com/schema/couchdb/integration http://www.opencredo.com/schema/couchdb/integration/opencredo-integration-couchdb.xsd
+						http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
 
 
-    <bean id="documentOperations" class="org.mockito.Mockito" factory-method="mock">
-        <constructor-arg value="org.opencredo.couchdb.core.CouchDbDocumentOperations"/>
-    </bean>
+    <si:channel id="input">
+        <si:queue capacity="10"/>
+    </si:channel>
 
+    <si-couchdb:inbound-channel-adapter id="inboundChannelAdapter" auto-startup="false" channel="input"
+            database-url="${couchdb.url}${couchdb.testDatabase}_design/testview/_view/by_message" all-documents="true" all-documents-limit="5">
+        <si:poller fixed-rate="1000"/>
+    </si-couchdb:inbound-channel-adapter>
+
+	<!-- Needed to receive the messages in our JUnit test -->
     <bean class="org.springframework.integration.core.MessagingTemplate">
         <constructor-arg ref="input"/>
+        <property name="receiveTimeout" value="10000"/>
     </bean>
 
 </beans>

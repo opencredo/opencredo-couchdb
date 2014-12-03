@@ -174,10 +174,12 @@
 
     <xsd:element name="inbound-channel-adapter">
         <xsd:annotation>
-            <xsd:documentation>
-                Configures an inbound Channel Adapter that polls the changes on a CouchDB database
-                and sends Messages whose payloads are instances of java.net.URI representing a changed document
-            </xsd:documentation>
+            <xsd:documentation><![CDATA[
+                Configures an inbound Channel Adapter that retrieves either the changed documents or all documents of a CouchDB
+                database or view and sends Messages whose payloads are instances of java.net.URI with which the document can be retrieved.
+                If you are interested in all documents, set 'all-documents' to true and specify a 'database-url' which should either be
+                the URL of a view (/dbname/_design/mydesigndoc/_view/myviewname) or an 'all docs' URL (/dbname/_all_docs).
+            ]]></xsd:documentation>
         </xsd:annotation>
         <xsd:complexType>
             <xsd:sequence>
@@ -196,6 +198,20 @@
                 </xsd:annotation>
             </xsd:attribute>
             <xsd:attribute name="auto-startup" type="xsd:string" default="true"/>
+            <xsd:attribute name="all-documents" type="xsd:string" default="false">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[
+        If true, not only the changes, but all documents (i.e. their IDs) are retrieved; specify a view or _all_docs URL as database-url. Default is false.
+                    ]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="all-documents-limit" type="xsd:integer" default="10">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[
+        The number of IDs to retrieve at once from the database. Default is 10.
+                    ]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
         </xsd:complexType>
     </xsd:element>
 

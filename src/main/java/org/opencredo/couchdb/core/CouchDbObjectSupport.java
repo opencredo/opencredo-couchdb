@@ -16,11 +16,14 @@
 
 package org.opencredo.couchdb.core;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.opencredo.couchdb.BasicAuthRestTemplate;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestOperations;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * Base class for classes that need to communicate with CouchDB.
@@ -31,7 +34,19 @@ public abstract class CouchDbObjectSupport {
 
     protected final Log logger = LogFactory.getLog(this.getClass());
 
-    protected RestOperations restOperations = new RestTemplate();
+    protected RestOperations restOperations;
+
+    protected CouchDbObjectSupport() {
+       restOperations = new BasicAuthRestTemplate(100);
+    }
+
+    protected CouchDbObjectSupport(String username, String password, String url) {
+       restOperations = new BasicAuthRestTemplate(username, password, url, 100);
+    }
+
+    public CouchDbObjectSupport(String defaultDatabaseUrl) {
+        restOperations = new BasicAuthRestTemplate(defaultDatabaseUrl);
+    }
 
     public void setRestOperations(RestOperations restOperations) {
         Assert.notNull(restOperations, "restOperations cannot be null");

@@ -16,16 +16,16 @@
 
 package org.opencredo.couchdb.outbound;
 
-import org.hamcrest.Matchers;
-import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.opencredo.couchdb.CouchDbIntegrationTest;
 import org.opencredo.couchdb.DummyDocument;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.Message;
+import org.springframework.messaging.Message;
 import org.springframework.integration.core.MessagingTemplate;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -34,8 +34,8 @@ import static org.junit.Assert.assertThat;
  * @author Tareq Abedrabbo (tareq.abedrabbo@opencredo.com)
  * @since 17/01/2011
  */
-
-@ContextConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath:org/opencredo/couchdb/outbound/CouchDbOutboundChannelAdapterTest-context.xml" })
 public class CouchDbOutboundChannelAdapterTest extends CouchDbIntegrationTest {
 
     @Autowired

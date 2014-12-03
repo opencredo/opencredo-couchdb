@@ -16,11 +16,14 @@
 
 package org.opencredo.couchdb.outbound;
 
+import java.util.HashMap;
+
 import org.junit.Test;
 import org.opencredo.couchdb.CouchDbIntegrationTest;
 import org.opencredo.couchdb.DummyDocument;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.integration.Message;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.messaging.Message;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -35,7 +38,12 @@ import static org.junit.Assert.assertThat;
 public class CouchDbSendingMessageHandlerTest extends CouchDbIntegrationTest {
 
     @Autowired
+    @Qualifier("messageHandler")
     private CouchDbSendingMessageHandler messageHandler;
+
+    @Autowired
+    @Qualifier("messageHandlerTemplateUrl")
+    private CouchDbSendingMessageHandler messageHandlerTemplateUrl;
 
     @Test
     public void handleMessage() throws Exception {
@@ -45,6 +53,20 @@ public class CouchDbSendingMessageHandlerTest extends CouchDbIntegrationTest {
 
         //assert message in the database
         DummyDocument result = getDocument(message.getHeaders().getId().toString(), DummyDocument.class);
+        assertThat(document.getMessage(), equalTo(result.getMessage()));
+
+    }
+
+    @Test
+    public void handleMessageTemplateUrl() throws Exception {
+        DummyDocument document = new DummyDocument("We use template variables in our URL");
+        HashMap<String, Object> headers = new HashMap<String, Object>();
+        headers.put("greatDatabase", "couchdb");
+        Message<DummyDocument> message = MessageBuilder.withPayload(document).copyHeaders(headers).build();
+        messageHandlerTemplateUrl.handleMessage(message);
+
+        //assert message in the database
+        DummyDocument result = getDocument("couchdb-" + message.getHeaders().getId().toString(), DummyDocument.class);
         assertThat(document.getMessage(), equalTo(result.getMessage()));
 
     }
